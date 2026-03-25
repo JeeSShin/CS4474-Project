@@ -11,7 +11,7 @@ export function Btn({ children, onClick, color = "#00F5D4", style: extra = {}, b
         borderRadius: 10,
         background: hov ? `${color}22` : `${color}0A`,
         color, fontWeight: 700, fontSize: big ? 18 : 14,
-        cursor: "pointer", letterSpacing: 1, textTransform: "uppercase",
+        letterSpacing: 1, textTransform: "uppercase",
         transition: "all 0.2s",
         boxShadow: hov ? `0 0 20px ${color}33` : "none",
         ...extra,

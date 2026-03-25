@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { NEON, FONT, MONO } from "../constants";
+import { convertDisplay, convertNumber } from "../numerals";
 import { Btn } from "../components/Btn";
 
-export function TutorialScreen({ onBack }) {
+export function TutorialScreen({ numeral, onBack }) {
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState(null);
 
@@ -15,7 +16,7 @@ export function TutorialScreen({ onBack }) {
           fontSize: 36, fontWeight: 700, fontFamily: MONO, color: "var(--neon-green)",
           padding: "16px 28px", background: "var(--surface)", borderRadius: 12,
           textShadow: "0 0 20px rgba(0,245,212,0.4)",
-        }}>8 + 14 = <span style={{ color: "var(--neon-yellow)" }}>?</span></div>
+        }}>{convertDisplay("8 + 14", numeral)} = <span style={{ color: "var(--neon-yellow)" }}>?</span></div>
       ),
     },
     {
@@ -30,7 +31,7 @@ export function TutorialScreen({ onBack }) {
               background: `${NEON[i]}0A`, gap: 4,
             }}>
               <span style={{ fontSize: 10, fontFamily: MONO, color: `${NEON[i]}88` }}>Gate {i+1}</span>
-              <span style={{ fontSize: 24, fontFamily: MONO, fontWeight: 700, color: "#fff" }}>{v}</span>
+              <span style={{ fontSize: 24, fontFamily: MONO, fontWeight: 700, color: "#fff" }}>{convertNumber(v, numeral)}</span>
             </div>
           ))}
         </div>
@@ -38,7 +39,7 @@ export function TutorialScreen({ onBack }) {
     },
     {
       title: "TRY IT!",
-      desc: "8 + 14 = ? Pick the right door below.",
+      desc: `${convertDisplay("8 + 14", numeral)} = ? Pick the right door below.`,
       render: () => (
         <div style={{ display: "flex", gap: 12 }}>
           {[20, 22, 24].map((v, i) => {
@@ -47,13 +48,13 @@ export function TutorialScreen({ onBack }) {
             return (
               <button key={i} onClick={() => setPicked(i)} style={{
                 width: 80, height: 100, border: `2px solid ${wasPicked ? (isRight ? "var(--neon-green)" : "var(--neon-red)") : NEON[i] + "55"}`,
-                borderRadius: 10, cursor: "pointer", fontFamily: MONO,
+                borderRadius: 10, fontFamily: MONO,
                 display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                 background: wasPicked ? (isRight ? "rgba(0,245,212,0.15)" : "rgba(254,95,85,0.15)") : `${NEON[i]}0A`,
                 animation: wasPicked && !isRight ? "shake 0.4s" : "none", gap: 4,
               }}>
                 <span style={{ fontSize: 10, color: `${NEON[i]}88` }}>Gate {i+1}</span>
-                <span style={{ fontSize: 24, fontWeight: 700, color: "#fff" }}>{v}</span>
+                <span style={{ fontSize: 24, fontWeight: 700, color: "#fff" }}>{convertNumber(v, numeral)}</span>
                 {wasPicked && <span style={{ fontSize: 11 }}>{isRight ? "✅" : "❌"}</span>}
               </button>
             );

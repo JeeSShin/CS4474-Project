@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MONO } from "../constants";
+import { convertNumber } from "../numerals";
 import { Burst } from "./Burst";
 
-export function GatewayDoor({ value, color, idx, onClick, state, disabled }) {
+export function GatewayDoor({ value, color, idx, onClick, state, disabled, numeral }) {
   const isCorrect = state === "correct";
   const isWrong = state === "wrong";
   const [hov, setHov] = useState(false);
@@ -16,7 +17,7 @@ export function GatewayDoor({ value, color, idx, onClick, state, disabled }) {
       style={{
         position: "relative", overflow: "hidden",
         width: 120, minHeight: 170, border: `2px solid ${color}55`,
-        borderRadius: 14, cursor: disabled ? "default" : "pointer",
+        borderRadius: 14,
         background: isCorrect
           ? `linear-gradient(170deg, ${color}55, ${color}22)`
           : `linear-gradient(170deg, ${color}18, ${color}08)`,
@@ -38,9 +39,10 @@ export function GatewayDoor({ value, color, idx, onClick, state, disabled }) {
         fontSize: 11, fontFamily: MONO, letterSpacing: 3, color: `${color}99`, textTransform: "uppercase",
       }}>Gate {idx + 1}</span>
       <span style={{
-        fontSize: 34, fontWeight: 700, fontFamily: MONO, color: "#fff",
+        fontSize: (() => { const len = convertNumber(value, numeral).length; return len <= 4 ? 34 : len <= 6 ? 26 : len <= 8 ? 20 : 16; })(),
+        fontWeight: 700, fontFamily: MONO, color: "#fff",
         textShadow: `0 0 16px ${color}88`,
-      }}>{value}</span>
+      }}>{convertNumber(value, numeral)}</span>
       <div style={{
         position: "absolute", bottom: 8, left: "50%", transform: "translateX(-50%)",
         width: 24, height: 3, borderRadius: 2, background: `${color}30`,

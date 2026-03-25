@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { DIFF, STAGES, NEON, FONT, MONO } from "../constants";
 import { makeEquation, timeForRound } from "../mathEngine";
+import { convertDisplay, convertNumber } from "../numerals";
 import { sfxCorrect, sfxWrong, sfxTick, sfxTimeout } from "../sound";
 import { Timer } from "../components/Timer";
 import { GatewayDoor } from "../components/GatewayDoor";
 import { Btn } from "../components/Btn";
 
-export function GameScreen({ diff, startStage, sound, onFinish }) {
+export function GameScreen({ diff, startStage, sound, numeral, onFinish }) {
   const [stage, setStage] = useState(startStage);
   const [round, setRound] = useState(0);
   const [score, setScore] = useState(0);
@@ -54,6 +55,16 @@ export function GameScreen({ diff, startStage, sound, onFinish }) {
   }, [frozen, intro, eq, sound]);
 
   useEffect(() => {
+    const handleKey = (e) => {
+      const num = parseInt(e.key, 10);
+      if (!num || num < 1 || !eq || frozen || num > eq.options.length) return;
+      pick(num - 1);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [eq, frozen]);
+
+  useEffect(() => {
     if (intro) return;
     if (lives <= 0) { onFinish({ score, stage, result: "gameover" }); return; }
     if (round >= stg.rounds) {
@@ -80,7 +91,7 @@ export function GameScreen({ diff, startStage, sound, onFinish }) {
     } else {
       setStreak(0);
       setDoorSt(prev => prev.map((_, i) => i === idx ? "wrong" : i === eq.correctIdx ? "correct" : "idle"));
-      setFeedback(`✗ WRONG — answer was ${eq.answer}`);
+      setFeedback(`✗ WRONG — answer was ${convertNumber(eq.answer, numeral)}`);
       sfxWrong(sound);
       setTimeout(() => setRound(r => r + 1), 1300);
     }
@@ -122,12 +133,13 @@ export function GameScreen({ diff, startStage, sound, onFinish }) {
       <Timer timeLeft={tLeft} maxTime={tMax} />
 
       <div style={{
-        fontSize: 40, fontWeight: 700, fontFamily: MONO, color: "var(--text)",
+        fontSize: (() => { const len = convertDisplay(eq.display, numeral).length; return len > 20 ? 24 : len > 14 ? 30 : 40; })(),
+        fontWeight: 700, fontFamily: MONO, color: "var(--text)",
         padding: "16px 32px", background: "var(--surface)", borderRadius: 14,
         border: `1px solid ${stg.color}22`, letterSpacing: 3,
         textShadow: `0 0 20px ${stg.color}30`, textAlign: "center", minWidth: 180,
       }}>
-        {eq.display} = <span style={{ color: stg.color }}>?</span>
+        {convertDisplay(eq.display, numeral)} = <span style={{ color: stg.color }}>?</span>
       </div>
 
       <div style={{
@@ -138,7 +150,7 @@ export function GameScreen({ diff, startStage, sound, onFinish }) {
       <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
         {eq.options.map((v, i) => (
           <GatewayDoor key={`${round}-${i}`} value={v} color={NEON[i % NEON.length]}
-            idx={i} onClick={pick} state={doorSt[i]} disabled={frozen} />
+            idx={i} onClick={pick} state={doorSt[i]} disabled={frozen} numeral={numeral} />
         ))}
       </div>
 

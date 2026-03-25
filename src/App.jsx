@@ -13,6 +13,7 @@ export default function App() {
   const [screen, setScreen] = useState("menu");
   const [diff, setDiff] = useState("beginner");
   const [sound, setSound] = useState(true);
+  const [numeral, setNumeral] = useState("arabic");
   const [startStage, setStartStage] = useState(1);
   const [result, setResult] = useState(null);
   const [gameKey, setGameKey] = useState(0);
@@ -37,15 +38,15 @@ export default function App() {
         )}
         {screen === "settings" && (
           <SettingsScreen diff={diff} setDiff={setDiff} sound={sound} setSound={setSound}
-            onBack={() => setScreen("menu")} />
+            numeral={numeral} setNumeral={setNumeral} onBack={() => setScreen("menu")} />
         )}
         {screen === "stages" && (
           <StageSelectScreen onSelect={(s) => startGame(s)} onBack={() => setScreen("menu")} />
         )}
-        {screen === "tutorial" && <TutorialScreen onBack={() => setScreen("menu")} />}
+        {screen === "tutorial" && <TutorialScreen numeral={numeral} onBack={() => setScreen("menu")} />}
         {screen === "game" && (
           <GameScreen key={gameKey} diff={diff} startStage={startStage} sound={sound}
-            onFinish={(r) => { setResult(r); setScreen("results"); }} />
+            numeral={numeral} onFinish={(r) => { setResult(r); setScreen("results"); }} />
         )}
         {screen === "results" && result && (
           <ResultsScreen data={result} onMenu={() => setScreen("menu")}

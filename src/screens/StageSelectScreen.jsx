@@ -10,7 +10,7 @@ function StageCard({ stage: s, onSelect }) {
       style={{
         width: 300, padding: "16px 20px", border: `1px solid ${s.color}33`,
         borderRadius: 12, background: hov ? `${s.color}15` : "var(--surface)",
-        color: "var(--text)", cursor: "pointer", textAlign: "left", fontFamily: FONT,
+        color: "var(--text)", textAlign: "left", fontFamily: FONT,
         transition: "all 0.2s", transform: hov ? "translateY(-2px)" : "none",
         boxShadow: hov ? `0 8px 24px ${s.color}20` : "none",
       }}>

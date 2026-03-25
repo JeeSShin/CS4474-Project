@@ -1,5 +1,9 @@
 import { FONT } from "./constants";
 
+const KEY_DEFAULT = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g stroke='rgb(0,245,212)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g></svg>") 10 2, default`;
+
+const KEY_POINTER = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g transform='rotate(-20,10,16)'><g stroke='rgb(0,245,212)' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.3'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g><g stroke='rgb(0,245,212)' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g></g></svg>") 5 3, pointer`;
+
 export const globalCSS = `
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Share+Tech+Mono&display=swap');
 
@@ -48,4 +52,8 @@ export const globalCSS = `
 
 button { font-family: ${FONT}; }
 button:focus-visible { outline: 2px solid var(--neon-green); outline-offset: 3px; }
+
+body { cursor: ${KEY_DEFAULT}; }
+a, button, [role="button"], select, label[for] { cursor: ${KEY_POINTER}; }
+[disabled] { cursor: ${KEY_DEFAULT}; }
 `;
