@@ -13,5 +13,6 @@ export const STAGES = [
 
 export const NEON = ["#00F5D4","#7B61FF","#FE5F55","#FFD166"];
 
-export const FONT = "'Chakra Petch', sans-serif";
-export const MONO = "'Share Tech Mono', monospace";
+export const FONT = "'Rajdhani', sans-serif";
+export const MONO = "'JetBrains Mono', monospace";
+export const DISPLAY = "'Teko', sans-serif";

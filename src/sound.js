@@ -14,3 +14,6 @@ export function sfxCorrect(on) { if (!on) return; beep(520, 0.1); setTimeout(() 
 export function sfxWrong(on)   { if (!on) return; beep(180, 0.35, "sawtooth"); }
 export function sfxTick(on)    { if (!on) return; beep(1000, 0.03, "square", 0.04); }
 export function sfxTimeout(on) { if (!on) return; beep(140, 0.5, "sawtooth", 0.12); }
+export function sfxClick(on)   { if (!on) return; beep(800, 0.04, "sine", 0.05); }
+export function sfxNav(on)     { if (!on) return; beep(600, 0.06, "sine", 0.04); setTimeout(() => beep(900, 0.06, "sine", 0.04), 40); }
+export function sfxToggle(on, state) { if (!on) return; beep(state ? 700 : 500, 0.06, "sine", 0.05); }
