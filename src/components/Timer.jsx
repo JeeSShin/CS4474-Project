@@ -1,4 +1,4 @@
-import { MONO } from "../constants";
+import { MONO } from "../appConstants";
 
 export function Timer({ timeLeft, maxTime }) {
   const pct = Math.max(0, timeLeft / maxTime * 100);

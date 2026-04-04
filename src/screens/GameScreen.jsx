@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { DIFF, STAGES, NEON, MONO, DISPLAY } from "../constants";
+import { DIFF, STAGES, NEON, MONO, DISPLAY } from "../appConstants";
 import { makeEquation } from "../mathEngine";
-import { convertDisplay, convertNumber } from "../numerals";
-import { sfxCorrect, sfxWrong } from "../sound";
-import { GatewayDoor } from "../components/GatewayDoor";
+import { convertDisplay, convertNumber } from "../numberStyles";
+import { sfxDoorUnlock, sfxFootstep, sfxWrong } from "../sound";
+import { GatewayCave } from "../components/GatewayCave";
 import { Btn } from "../components/Btn";
 
 export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit }) {
@@ -21,6 +21,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const [paused, setPaused] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [eliminated, setEliminated] = useState([]);
+  const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
 
   const roundLog = useRef([]);
   const stageScores = useRef({});
@@ -48,6 +49,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     setScore(0);
     setStreak(0);
     setIntro(true);
+    setAnsweredCorrectly(false);
     roundLog.current = [];
     stageScores.current = {};
     bestStreak.current = 0;
@@ -59,6 +61,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     const e = makeEquation(diff, stage);
     setEq(e); setDoorSt(e.options.map(() => "idle"));
     setFrozen(false); setFeedback(""); setScoreBreakdown("");
+    setAnsweredCorrectly(false);
     setHintUsed(false); setEliminated([]);
     roundStartTime.current = Date.now();
   }, [diff, stage]);
@@ -100,6 +103,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     setFrozen(true);
     const timeTaken = (Date.now() - roundStartTime.current) / 1000;
     if (idx === eq.correctIdx) {
+      setAnsweredCorrectly(true);
       const ns = streak + 1;
       if (ns > bestStreak.current) bestStreak.current = ns;
       const bonus = ns >= 3 ? ns * 12 : 0;
@@ -114,14 +118,15 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       setScoreBreakdown(parts.join("  "));
 
       setFeedback(ns >= 3 ? `\uD83D\uDD25 ${ns}\u00D7 STREAK  +${pts}` : `+${pts}`);
-      sfxCorrect(sound);
+      sfxDoorUnlock(sound);
       totalCorrect.current++;
       roundLog.current.push({ stage, round, result: "correct", timeTaken, points: pts });
 
       setTimeout(() => setRound(r => r + 1), 1000);
     } else {
+      setAnsweredCorrectly(false);
       setStreak(0);
-      setDoorSt(prev => prev.map((_, i) => i === idx ? "wrong" : i === eq.correctIdx ? "correct" : "idle"));
+      setDoorSt(prev => prev.map((_, i) => i === idx ? "wrong" : "idle"));
       const reason = eq.reasonMap?.[eq.options[idx]];
       setFeedback(`\u2717 WRONG \u2014 answer was ${convertNumber(eq.answer, numeral)}${reason ? "\n" + reason : ""}`);
       sfxWrong(sound);
@@ -145,6 +150,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   };
 
   const handleEnter = () => {
+    sfxFootstep(sound);
     setExiting(true);
     setTimeout(() => { setExiting(false); setIntro(false); }, 400);
   };
@@ -196,6 +202,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   if (!eq) return null;
 
   const isBadFeedback = feedback.startsWith("\u2717") || feedback.startsWith("\u23F1");
+  const hasCorrectSelection = answeredCorrectly;
 
   // Equation display font — min 28px
   const eqDisplay = convertDisplay(eq.display, numeral);
@@ -305,11 +312,23 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       {/* Door area — hidden when paused */}
       {!paused && (
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
-          {eq.options.map((v, i) => (
-            <GatewayDoor key={`${round}-${i}`} value={v} color={NEON[i % NEON.length]}
-              idx={i} onClick={pick} state={doorSt[i]} disabled={frozen} numeral={numeral}
-              eliminated={eliminated.includes(i)} doorCount={doorCount} />
-          ))}
+          {eq.options
+            .map((v, i) => ({ v, i }))
+            .filter(({ i }) => !hasCorrectSelection || i === eq.correctIdx)
+            .map(({ v, i }) => (
+              <GatewayCave
+                key={`${round}-${i}`}
+                value={v}
+                color={NEON[i % NEON.length]}
+                idx={i}
+                onClick={pick}
+                state={doorSt[i]}
+                disabled={frozen}
+                numeral={numeral}
+                eliminated={eliminated.includes(i)}
+                doorCount={doorCount}
+              />
+            ))}
         </div>
       )}
 

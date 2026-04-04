@@ -6,12 +6,12 @@ export const DIFF = {
 };
 
 export const STAGES = [
-  { id: 1, name: "ENTRANCE",  rounds: 5,  color: "#00F5D4", tagline: "Warm up your neurons" },
-  { id: 2, name: "CORRIDOR",  rounds: 7,  color: "#7B61FF", tagline: "Numbers grow, time holds" },
-  { id: 3, name: "VAULT",     rounds: 10, color: "#FE5F55", tagline: "Think fast or fall" },
+  { id: 1, name: "ENTRANCE",  rounds: 5,  color: "#FFD700", tagline: "Warm up your neurons" },
+  { id: 2, name: "CORRIDOR",  rounds: 7,  color: "#FF9500", tagline: "Numbers grow, time holds" },
+  { id: 3, name: "VAULT",     rounds: 10, color: "#E85D3F", tagline: "Think fast or fall" },
 ];
 
-export const NEON = ["#00F5D4","#7B61FF","#FE5F55","#FFD166"];
+export const NEON = ["#FFD700","#FF9500","#E85D3F","#E8A84B"];
 
 export const FONT = "'Rajdhani', sans-serif";
 export const MONO = "'JetBrains Mono', monospace";

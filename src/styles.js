@@ -1,8 +1,8 @@
-import { FONT } from "./constants";
+import { FONT } from "./appConstants";
 
-const KEY_DEFAULT = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g stroke='rgb(0,245,212)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g></svg>") 10 2, default`;
+const KEY_DEFAULT = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g stroke='rgb(255,215,0)' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g></svg>") 10 2, default`;
 
-const KEY_POINTER = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g transform='rotate(-20,10,16)'><g stroke='rgb(0,245,212)' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.3'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g><g stroke='rgb(0,245,212)' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g></g></svg>") 5 3, pointer`;
+const KEY_POINTER = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><g transform='rotate(-20,10,16)'><g stroke='rgb(255,215,0)' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.3'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g><g stroke='rgb(255,215,0)' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'><line x1='10' y1='4' x2='10' y2='19'/><line x1='10' y1='6' x2='16' y2='6'/><line x1='10' y1='10' x2='15' y2='10'/><circle cx='10' cy='24' r='5'/></g></g></svg>") 5 3, pointer`;
 
 export const globalCSS = `
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;700&family=Teko:wght@600;700&display=swap');
@@ -18,10 +18,10 @@ export const globalCSS = `
   --text: #D8DDE8;
   --text-dim: #6B7A94;
   --border: rgba(255,255,255,0.08);
-  --neon-green: #00F5D4;
-  --neon-purple: #7B61FF;
-  --neon-red: #FE5F55;
-  --neon-yellow: #FFD166;
+  --neon-green: #FFD700;
+  --neon-purple: #FF9500;
+  --neon-red: #E85D3F;
+  --neon-yellow: #E8A84B;
 }
 
 /* === Existing animations === */
@@ -124,9 +124,57 @@ export const globalCSS = `
   from { transform: translateX(0); }
   to { transform: translateX(110%); }
 }
+@keyframes answerDoorSlideRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(110%); }
+}
 @keyframes burstFlash {
   from { transform: translate(-50%, -50%) scale(0); opacity: 0.7; }
   to { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+/* === Cave Animations === */
+@keyframes caveGlow {
+  0%   { box-shadow: inset 0 0 15px rgba(255, 200, 100, 0.1), 0 4px 16px rgba(0,0,0,0.2); }
+  50%  { box-shadow: inset 0 0 30px rgba(255, 200, 100, 0.25), 0 4px 16px rgba(0,0,0,0.3); }
+  100% { box-shadow: inset 0 0 15px rgba(255, 200, 100, 0.1), 0 4px 16px rgba(0,0,0,0.2); }
+}
+
+@keyframes stalactiteSway {
+  0%,100%   { transform: scaleY(1) translateX(0); }
+  50%       { transform: scaleY(1.02) translateX(1px); }
+}
+
+@keyframes stalagmiteSway {
+  0%,100%   { transform: scaleY(1) translateX(0); }
+  50%       { transform: scaleY(1.02) translateX(-1px); }
+}
+
+@keyframes floatDust {
+  0% {
+    opacity: 0;
+    transform: translate(var(--dust-x), var(--dust-y)) scale(1);
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dust-x) + 20px), calc(var(--dust-y) - 60px)) scale(0.5);
+  }
+}
+
+@keyframes caveBreathing {
+  0%,100% { opacity: 0.6; }
+  50%     { opacity: 0.85; }
+}
+
+@keyframes glowingStone {
+  0%,100%  { text-shadow: 0 0 4px rgba(255,200,100,0.3); }
+  50%      { text-shadow: 0 0 12px rgba(255,200,100,0.6); }
 }
 @keyframes driftUp {
   from { transform: translateY(0) translateX(0); opacity: 0; }

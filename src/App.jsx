@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback, createContext } from "react";
-import { STAGES, FONT } from "./constants";
+import { DIFF, STAGES, FONT } from "./appConstants";
 import { globalCSS } from "./styles";
 import { sfxNav } from "./sound";
-import { CorridorBG } from "./components/CorridorBG";
+import { RealisticCaveBG } from "./components/RealisticCaveBG";
 import { MenuScreen } from "./screens/MenuScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { StageSelectScreen } from "./screens/StageSelectScreen";
@@ -21,17 +21,20 @@ function saveStorage(key, data) {
 }
 
 const SCREEN_TITLES = {
-  menu: "Equation Gateway",
-  settings: "Settings — Equation Gateway",
-  stages: "Stage Select — Equation Gateway",
-  tutorial: "Tutorial — Equation Gateway",
-  game: "Playing — Equation Gateway",
-  results: "Results — Equation Gateway",
+  menu: "Open Sesame",
+  settings: "Settings — Open Sesame",
+  stages: "Stage Select — Open Sesame",
+  tutorial: "Tutorial — Open Sesame",
+  game: "Playing — Open Sesame",
+  results: "Results — Open Sesame",
 };
 
 export default function App() {
   const [screen, setScreen] = useState("menu");
-  const [diff, setDiff] = useState(() => loadStorage("eq-gateway-settings", null)?.diff || "beginner");
+  const [diff, setDiff] = useState(() => {
+    const savedDiff = loadStorage("eq-gateway-settings", null)?.diff;
+    return DIFF[savedDiff] ? savedDiff : "beginner";
+  });
   const [sound, setSound] = useState(() => loadStorage("eq-gateway-settings", null)?.sound ?? true);
   const [numeral, setNumeral] = useState(() => loadStorage("eq-gateway-settings", null)?.numeral || "arabic");
   const [startStage, setStartStage] = useState(1);
@@ -54,7 +57,7 @@ export default function App() {
   }, [diff, sound, numeral, reduceMotion]);
 
   useEffect(() => {
-    document.title = SCREEN_TITLES[screen] || "Equation Gateway";
+    document.title = "Open Sesame: Math Doors";
     if (mainRef.current) {
       mainRef.current.focus();
     }
@@ -88,7 +91,7 @@ export default function App() {
 
   const navigate = useCallback((s) => { sfxNav(sound); setScreen(s); }, [sound]);
 
-  const accentColor = screen === "game" ? (STAGES[(startStage || 1) - 1]?.color || "#00F5D4") : "#00F5D4";
+  const accentColor = screen === "game" ? (STAGES[(startStage || 1) - 1]?.color || "#FFD700") : "#FFD700";
 
   return (
     <SoundContext.Provider value={sound}>
@@ -102,19 +105,18 @@ export default function App() {
       {/* Skip navigation link */}
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
-      <CorridorBG accentColor={accentColor} running={screen === "game"} />
+      <RealisticCaveBG accentColor={accentColor} running={screen === "game"} />
 
       <main id="main-content" ref={mainRef} tabIndex={-1}
         style={{ width: "100%", maxWidth: 600, position: "relative", zIndex: 1, outline: "none" }}>
         {screen === "menu" && (
           <MenuScreen onPlay={() => startGame(1)} onTutorial={() => navigate("tutorial")}
-            onStages={() => navigate("stages")} onSettings={() => navigate("settings")}
+            onSettings={() => navigate("settings")}
             highScores={highScores} returning={returning} />
         )}
         {screen === "settings" && (
           <SettingsScreen diff={diff} setDiff={setDiff} sound={sound} setSound={setSound}
             numeral={numeral} setNumeral={setNumeral}
-            reduceMotion={reduceMotion} setReduceMotion={setReduceMotion}
             onBack={() => navigate("menu")} />
         )}
         {screen === "stages" && (

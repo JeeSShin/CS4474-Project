@@ -1,5 +1,5 @@
-import { DIFF, FONT, MONO, DISPLAY } from "../constants";
-import { NUMERAL_SYSTEMS } from "../numerals";
+import { DIFF, FONT, MONO, DISPLAY } from "../appConstants";
+import { NUMERAL_SYSTEMS } from "../numberStyles";
 import { Btn } from "../components/Btn";
 import { sfxToggle } from "../sound";
 
@@ -76,7 +76,15 @@ function ToggleSwitch({ checked, onToggle, label }) {
   );
 }
 
-export function SettingsScreen({ diff, setDiff, sound, setSound, numeral, setNumeral, reduceMotion, setReduceMotion, onBack }) {
+export function SettingsScreen({
+  diff,
+  setDiff,
+  sound,
+  setSound,
+  numeral,
+  setNumeral,
+  onBack,
+}) {
   return (
     <div style={{ animation: "fadeUp 0.5s ease-out", paddingTop: 30 }}>
       {/* Back button */}
@@ -105,13 +113,6 @@ export function SettingsScreen({ diff, setDiff, sound, setSound, numeral, setNum
 
       <SettingPanel title="SOUND" accentColor="var(--neon-yellow)">
         <ToggleSwitch checked={sound} onToggle={() => { sfxToggle(true, !sound); setSound(!sound); }} label="Sound effects" />
-      </SettingPanel>
-
-      <SettingPanel title="REDUCE MOTION" accentColor="var(--neon-green)">
-        <ToggleSwitch checked={reduceMotion} onToggle={() => { sfxToggle(sound, !reduceMotion); setReduceMotion(!reduceMotion); }} label="Reduce motion" />
-        <div style={{ fontSize: 11, color: "var(--text-dim)", fontWeight: 400, marginTop: 8 }}>
-          Disables animations for motion sensitivity
-        </div>
       </SettingPanel>
 
       <SettingPanel title="NUMBER STYLE" accentColor="var(--neon-red)">

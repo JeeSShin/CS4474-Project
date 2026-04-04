@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { STAGES, FONT, MONO, DISPLAY } from "../constants";
+import { STAGES, FONT, MONO, DISPLAY } from "../appConstants";
 import { Btn } from "../components/Btn";
 
 function DoorOpenVisual({ color }) {

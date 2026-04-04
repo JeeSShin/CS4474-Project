@@ -1,4 +1,4 @@
-import { DIFF } from "./constants";
+import { DIFF } from "./appConstants";
 
 export const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
@@ -7,10 +7,6 @@ export function makeEquation(diff, stageId) {
   let lo = c.lo, hi = c.hi;
   if (stageId >= 2) { lo += 4; hi = Math.min(hi + 35, 250); }
   if (stageId >= 3) { lo += 6; hi = Math.min(hi + 60, 400); }
-
-  if ((diff === "expert" || diff === "extreme") && Math.random() > 0.55) {
-    return makePemdas(c, lo, hi);
-  }
 
   const op = c.ops[ri(0, c.ops.length - 1)];
   let a, b, ans;

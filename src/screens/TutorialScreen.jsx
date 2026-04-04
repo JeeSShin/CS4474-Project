@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { NEON, FONT, MONO, DISPLAY } from "../constants";
-import { convertDisplay } from "../numerals";
+import { NEON, FONT, MONO, DISPLAY } from "../appConstants";
+import { convertDisplay } from "../numberStyles";
 import { Btn } from "../components/Btn";
-import { GatewayDoor } from "../components/GatewayDoor";
+import { GatewayCave } from "../components/GatewayCave";
 import { sfxCorrect, sfxWrong } from "../sound";
 
 const TRY_VALS = [20, 22, 24];
@@ -90,7 +90,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       render: () => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           {TRY_VALS.map((v, i) => (
-            <GatewayDoor
+            <GatewayCave
               key={i} value={v} color={NEON[i]} idx={i}
               state="idle" disabled={true} numeral={numeral} doorCount={3}
               onClick={() => {}}
@@ -106,7 +106,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", gap: 12 }}>
             {TRY_VALS.map((v, i) => (
-              <GatewayDoor
+              <GatewayCave
                 key={i} value={v} color={NEON[i]} idx={i}
                 state={
                   gotCorrect && v === CORRECT_VAL ? "correct"
