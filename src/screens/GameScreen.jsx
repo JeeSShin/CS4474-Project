@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { DIFF, STAGES, NEON, FONT, MONO, DISPLAY } from "../constants";
-import { makeEquation, timeForRound } from "../mathEngine";
+import { DIFF, STAGES, NEON, MONO, DISPLAY } from "../constants";
+import { makeEquation } from "../mathEngine";
 import { convertDisplay, convertNumber } from "../numerals";
-import { sfxCorrect, sfxWrong, sfxTick, sfxTimeout } from "../sound";
-import { Timer } from "../components/Timer";
+import { sfxCorrect, sfxWrong } from "../sound";
 import { GatewayDoor } from "../components/GatewayDoor";
 import { Btn } from "../components/Btn";
 
@@ -12,23 +11,16 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const [round, setRound] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
-  const [lives, setLives] = useState(3);
   const [eq, setEq] = useState(null);
   const [doorSt, setDoorSt] = useState([]);
-  const [tLeft, setTLeft] = useState(0);
-  const [tMax, setTMax] = useState(0);
   const [frozen, setFrozen] = useState(false);
   const [intro, setIntro] = useState(true);
   const [feedback, setFeedback] = useState("");
   const [scoreBreakdown, setScoreBreakdown] = useState("");
   const [exiting, setExiting] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [livesFlash, setLivesFlash] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [eliminated, setEliminated] = useState([]);
-  const [stageCleanRounds, setStageCleanRounds] = useState(0);
-  const timer = useRef(null);
-  const pausedRef = useRef(false);
 
   const roundLog = useRef([]);
   const stageScores = useRef({});
@@ -36,104 +28,40 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const bestStreak = useRef(0);
   const totalCorrect = useRef(0);
   const totalWrong = useRef(0);
-  const totalTimeout = useRef(0);
-  const perfHistory = useRef([]);
 
   const stg = STAGES[stage - 1] || STAGES[0];
   const doorCount = DIFF[diff].doors;
 
   const togglePause = useCallback(() => {
     if (intro) return;
-    setPaused(p => {
-      pausedRef.current = !p;
-      if (!p) { clearInterval(timer.current); }
-      return !p;
-    });
+    setPaused(p => !p);
   }, [intro]);
 
   const handleResume = () => {
     setPaused(false);
-    pausedRef.current = false;
   };
 
   const handleRestart = () => {
     setPaused(false);
-    pausedRef.current = false;
     setStage(startStage);
     setRound(0);
     setScore(0);
     setStreak(0);
-    setLives(3);
     setIntro(true);
     roundLog.current = [];
     stageScores.current = {};
     bestStreak.current = 0;
     totalCorrect.current = 0;
     totalWrong.current = 0;
-    totalTimeout.current = 0;
-    perfHistory.current = [];
-    setStageCleanRounds(0);
-  };
-
-  const getAdaptiveMultiplier = () => {
-    const h = perfHistory.current;
-    if (h.length < 3) return 1.0;
-    const recent = h.slice(-5);
-    const correctRate = recent.filter(r => r.correct).length / recent.length;
-    const correctRounds = recent.filter(r => r.correct);
-    const avgSpeed = correctRounds.length > 0
-      ? correctRounds.reduce((s, r) => s + r.speed, 0) / correctRounds.length
-      : 1;
-    if (correctRate >= 0.8 && avgSpeed < 0.4) return 0.88;
-    if (correctRate >= 0.8 && avgSpeed < 0.6) return 0.94;
-    if (correctRate <= 0.4) return 1.12;
-    if (correctRate <= 0.6 && avgSpeed > 0.7) return 1.06;
-    return 1.0;
   };
 
   const next = useCallback(() => {
     const e = makeEquation(diff, stage);
-    const baseTime = timeForRound(diff, stage);
-    const t = Math.round(Math.max(4, baseTime * getAdaptiveMultiplier()) * 10) / 10;
     setEq(e); setDoorSt(e.options.map(() => "idle"));
-    setTLeft(t); setTMax(t); setFrozen(false); setFeedback(""); setScoreBreakdown("");
+    setFrozen(false); setFeedback(""); setScoreBreakdown("");
     setHintUsed(false); setEliminated([]);
     roundStartTime.current = Date.now();
   }, [diff, stage]);
-
-  // Graduated ticking: faster as time runs low
-  useEffect(() => {
-    if (frozen || intro || !eq || paused) return;
-    timer.current = setInterval(() => {
-      if (pausedRef.current) return;
-      setTLeft(p => {
-        const pct = p / tMax;
-        // Graduated ticking: every 2s above 50%, every 1s at 30-50%, every 0.5s below 30%
-        if (pct < 0.3 && Math.abs(p % 0.5) < 0.15) sfxTick(sound);
-        else if (pct < 0.5 && pct >= 0.3 && Math.abs(p % 1) < 0.15) sfxTick(sound);
-        else if (pct >= 0.5 && Math.abs(p % 2) < 0.15) sfxTick(sound);
-
-        if (p <= 0.15) {
-          clearInterval(timer.current);
-          setFrozen(true);
-          setLives(l => l - 1);
-          setStreak(0);
-          setStageCleanRounds(0);
-          setFeedback("\u23F1 TIME'S UP");
-          setLivesFlash(true);
-          setTimeout(() => setLivesFlash(false), 600);
-          sfxTimeout(sound);
-          totalTimeout.current++;
-          perfHistory.current.push({ correct: false, speed: 1.0 });
-          roundLog.current.push({ stage, round, result: "timeout", timeTaken: tMax });
-          setTimeout(() => setRound(r => r + 1), 1200);
-          return 0;
-        }
-        return p - 0.1;
-      });
-    }, 100);
-    return () => clearInterval(timer.current);
-  }, [frozen, intro, eq, sound, paused, tMax, stage, round]);
 
   useEffect(() => {
     const handleKey = (e) => {
@@ -153,16 +81,15 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     bestStreak: bestStreak.current,
     totalCorrect: totalCorrect.current,
     totalWrong: totalWrong.current,
-    totalTimeout: totalTimeout.current,
+    totalTimeout: 0,
     stageScores: stageScores.current,
   });
 
   useEffect(() => {
     if (intro) return;
-    if (lives <= 0) { onFinish(buildResult("lose")); return; }
     if (round >= stg.rounds) {
       if (stage >= 3) { onFinish(buildResult("win")); return; }
-      setStage(s => s + 1); setRound(0); setIntro(true); setStageCleanRounds(0); perfHistory.current = [];
+      setStage(s => s + 1); setRound(0); setIntro(true);
       return;
     }
     next();
@@ -170,53 +97,35 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
 
   const pick = (idx) => {
     if (frozen || eliminated.includes(idx)) return;
-    clearInterval(timer.current);
     setFrozen(true);
     const timeTaken = (Date.now() - roundStartTime.current) / 1000;
     if (idx === eq.correctIdx) {
       const ns = streak + 1;
       if (ns > bestStreak.current) bestStreak.current = ns;
       const bonus = ns >= 3 ? ns * 12 : 0;
-      const tb = Math.round(tLeft * 6);
-      const hintPenalty = hintUsed ? Math.round(tb * 0.5) : 0;
-      const pts = 100 + bonus + (tb - hintPenalty);
+      const pts = 100 + bonus;
       setScore(s => s + pts); setStreak(ns);
       stageScores.current[stage] = (stageScores.current[stage] || 0) + pts;
       setDoorSt(prev => prev.map((_, i) => i === idx ? "correct" : "idle"));
 
       // Score breakdown
       const parts = ["+100"];
-      if (tb - hintPenalty > 0) parts.push(`+${tb - hintPenalty} time`);
       if (bonus > 0) parts.push(`+${bonus} streak`);
       setScoreBreakdown(parts.join("  "));
 
       setFeedback(ns >= 3 ? `\uD83D\uDD25 ${ns}\u00D7 STREAK  +${pts}` : `+${pts}`);
       sfxCorrect(sound);
       totalCorrect.current++;
-      perfHistory.current.push({ correct: true, speed: timeTaken / tMax });
       roundLog.current.push({ stage, round, result: "correct", timeTaken, points: pts });
-
-      // Life recovery: award bonus life for 5-streak
-      const cleanRounds = stageCleanRounds + 1;
-      setStageCleanRounds(cleanRounds);
-      if (ns === 5 && lives < 3) {
-        setLives(l => Math.min(l + 1, 3));
-        setFeedback(prev => prev + "  \u2764\uFE0F +1 LIFE");
-      }
 
       setTimeout(() => setRound(r => r + 1), 1000);
     } else {
-      setLives(l => l - 1);
       setStreak(0);
-      setStageCleanRounds(0);
       setDoorSt(prev => prev.map((_, i) => i === idx ? "wrong" : i === eq.correctIdx ? "correct" : "idle"));
       const reason = eq.reasonMap?.[eq.options[idx]];
       setFeedback(`\u2717 WRONG \u2014 answer was ${convertNumber(eq.answer, numeral)}${reason ? "\n" + reason : ""}`);
-      setLivesFlash(true);
-      setTimeout(() => setLivesFlash(false), 600);
       sfxWrong(sound);
       totalWrong.current++;
-      perfHistory.current.push({ correct: false, speed: timeTaken / tMax });
       roundLog.current.push({ stage, round, result: "wrong", timeTaken });
       setTimeout(() => setRound(r => r + 1), 1300);
     }
@@ -299,7 +208,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     }}>
       {/* Visually-hidden aria-live region for screen reader announcements */}
       <div aria-live="polite" aria-atomic="true" className="sr-only">
-        Score: {score.toLocaleString()} points. Lives: {lives} of 3.
+        Score: {score.toLocaleString()} points.
         {streak >= 3 ? ` Streak: ${streak}.` : ""}
       </div>
 
@@ -319,27 +228,9 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
           <div style={{ color: "var(--text-dim)", fontSize: 11 }}>Round {round + 1}/{stg.rounds}</div>
         </div>
 
-        {/* Lives cell */}
-        <div style={{
-          flex: 1, padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 5, borderRight: "1px solid var(--border)",
-          animation: livesFlash ? "shake 0.4s" : "none",
-          transition: "background 0.3s",
-          background: livesFlash ? "rgba(254,95,85,0.15)" : "transparent",
-        }} role="status" aria-label={`Lives: ${lives} of 3`}>
-          <span style={{ fontSize: 11, color: "var(--text-dim)", fontWeight: 700, marginRight: 2 }}>Lives</span>
-          {Array.from({ length: 3 }, (_, i) => (
-            <span key={i} aria-hidden="true" style={{
-              fontSize: 18, color: i < lives ? "var(--neon-red)" : "var(--text-dim)",
-              opacity: i < lives ? 1 : 0.3,
-              transition: "all 0.3s",
-            }}>{i < lives ? "\u25C6" : "\u25C7"}</span>
-          ))}
-        </div>
-
         {/* Score cell */}
         <div style={{
-          flex: 1, padding: "8px 12px", textAlign: "right",
+          flex: 1, padding: "8px 12px", textAlign: "right", borderRight: "1px solid var(--border)",
         }}>
           <div style={{
             color: "var(--neon-yellow)", fontWeight: 700, fontSize: 14,
@@ -366,8 +257,6 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
           {"\u23F8"}
         </button>
       </div>
-
-      <Timer timeLeft={tLeft} maxTime={tMax} />
 
       {/* Equation screen panel — hidden when paused */}
       {paused ? (
@@ -444,7 +333,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
           )}
           {hintUsed && !frozen && (
             <span style={{ fontSize: 10, fontFamily: MONO, color: "var(--text-dim)", letterSpacing: 1 }}>
-              HINT USED (-50% time bonus)
+              HINT USED
             </span>
           )}
 

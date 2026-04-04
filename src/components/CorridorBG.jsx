@@ -24,84 +24,33 @@ export function CorridorBG({ accentColor = "#00F5D4", running }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
-      {/* Layer 1: Radial vignette */}
+      {/* Modern room background: light walls, subtle floor */}
       <div style={{
         position: "absolute", inset: 0,
-        background: `radial-gradient(ellipse at 50% 40%, var(--bg) 0%, var(--bg-deep) 100%)`,
+        background: `linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 50%, #d3d3d3 100%)`, // Light gray walls
       }} />
 
-      {/* Layer 2: Ceiling grid */}
+      {/* Floor */}
       <div style={{
-        position: "absolute", top: 0, left: "-10%", right: "-10%", height: "25%",
-        background: `repeating-linear-gradient(90deg, ${accentColor}10 0px, transparent 1px, transparent 60px),
-                     repeating-linear-gradient(0deg, ${accentColor}10 0px, transparent 1px, transparent 60px)`,
-        transform: "perspective(400px) rotateX(-55deg)",
-        transformOrigin: "top center",
-        opacity: pulseOpacity,
-        animation: running ? `corridorPulse ${isCorridor ? "2s" : isVault ? "1.5s" : "2.5s"} ease-in-out infinite` : "none",
+        position: "absolute", bottom: 0, left: 0, right: 0, height: "40%",
+        background: `linear-gradient(180deg, #8b4513 0%, #654321 100%)`, // Wooden floor gradient
       }} />
 
-      {/* Layer 3: Floor grid */}
+      {/* Subtle ceiling light effect */}
       <div style={{
-        position: "absolute", bottom: 0, left: "-10%", right: "-10%", height: "45%",
-        background: `repeating-linear-gradient(90deg, ${accentColor}18 0px, transparent 2px, transparent ${isVault ? 40 : isCorridor ? 50 : 60}px),
-                     repeating-linear-gradient(0deg, ${accentColor}18 0px, transparent 2px, transparent ${isVault ? 40 : isCorridor ? 50 : 60}px)`,
-        transform: "perspective(400px) rotateX(55deg)",
-        transformOrigin: "bottom center",
-        animation: running ? `corridorPulse ${isCorridor ? "2s" : isVault ? "1.5s" : "2.5s"} ease-in-out infinite` : "none",
+        position: "absolute", top: 0, left: "40%", right: "40%", height: "10%",
+        background: `radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 70%)`,
       }} />
 
-      {/* Layer 4: Horizontal accent line */}
+      {/* Soft shadows on walls */}
       <div style={{
-        position: "absolute", top: "8%", left: "20%", right: "20%", height: 1,
-        background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)`,
+        position: "absolute", top: 0, bottom: "40%", left: 0, width: "20%",
+        background: `linear-gradient(90deg, rgba(0,0,0,0.1) 0%, transparent 100%)`,
       }} />
-
-      {/* Layer 5: Side wall lines */}
-      {[14, 16, 84, 86].map(x => (
-        <div key={x} style={{
-          position: "absolute", top: "10%", bottom: "55%", left: `${x}%`, width: 1,
-          background: `linear-gradient(180deg, ${accentColor}30, transparent)`,
-        }} />
-      ))}
-
-      {/* Layer 6: Primary scanline — slower during gameplay */}
       <div style={{
-        position: "absolute", left: 0, right: 0, height: 3,
-        background: `${accentColor}12`,
-        animation: `scanline ${scanSpeed1} linear infinite`,
+        position: "absolute", top: 0, bottom: "40%", right: 0, width: "20%",
+        background: `linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.1) 100%)`,
       }} />
-
-      {/* Layer 7: Counter scanline — slower during gameplay */}
-      <div style={{
-        position: "absolute", left: 0, right: 0, height: 2,
-        background: `${accentColor}08`,
-        animation: `scanline ${scanSpeed2} linear infinite reverse`,
-      }} />
-
-      {/* Layer 8: Drifting dust particles (reduced count during gameplay) */}
-      {running && dustParticles.map((p, i) => (
-        <div key={`dust-${i}`} style={{
-          position: "absolute", bottom: 0, left: p.left,
-          width: p.size, height: p.size, borderRadius: "50%",
-          background: accentColor,
-          animation: `driftUp ${p.duration}s ${p.delay}s linear infinite`,
-        }} />
-      ))}
-
-      {/* Layer 9: Stage-specific atmosphere — removed Vault hatching */}
-      {isCorridor && (
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(to top, ${accentColor}08, transparent 40%)`,
-        }} />
-      )}
-      {isVault && (
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(to top, ${accentColor}08, transparent 30%), linear-gradient(to bottom, ${accentColor}05, transparent 20%)`,
-        }} />
-      )}
     </div>
   );
 }

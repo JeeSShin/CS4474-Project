@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NEON, FONT, MONO, DISPLAY } from "../constants";
 import { convertDisplay } from "../numerals";
 import { Btn } from "../components/Btn";
 import { GatewayDoor } from "../components/GatewayDoor";
-import { Timer } from "../components/Timer";
 import { sfxCorrect, sfxWrong } from "../sound";
 
-const DEMO_MAX = 12;
 const TRY_VALS = [20, 22, 24];
 const CORRECT_VAL = 22;
 
@@ -52,16 +50,6 @@ export function TutorialScreen({ numeral, sound, onBack }) {
   const [dir, setDir] = useState("slideLeft");
   const [tryPicked, setTryPicked] = useState(null);
   const [gotCorrect, setGotCorrect] = useState(false);
-  const [demoTime, setDemoTime] = useState(DEMO_MAX);
-
-  // Animate timer only on the BEAT THE CLOCK step (index 3)
-  useEffect(() => {
-    if (step !== 3) { setDemoTime(DEMO_MAX); return; }
-    const id = setInterval(() => {
-      setDemoTime(t => (t - 0.1 <= 0 ? DEMO_MAX : parseFloat((t - 0.1).toFixed(1))));
-    }, 100);
-    return () => clearInterval(id);
-  }, [step]);
 
   const goTo = (newStep) => {
     setDir(newStep > step ? "slideLeft" : "slideRight");
@@ -133,39 +121,35 @@ export function TutorialScreen({ numeral, sound, onBack }) {
           </div>
           {gotCorrect && (
             <div style={{ fontSize: 13, fontFamily: MONO, color: "var(--neon-green)", letterSpacing: 2 }}>
-              ✓ CORRECT! +100 pts
+              CORRECT! +100 pts
             </div>
           )}
           {tryPicked !== null && !gotCorrect && (
             <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--neon-red)", letterSpacing: 1 }}>
-              Try again — pick another door
+              Try again - pick another door
             </div>
           )}
         </div>
       ),
     },
     {
-      title: "BEAT THE CLOCK",
-      desc: "A timer counts down each round. It changes color as time runs out — green, then orange with a warning, then red with 'HURRY'.",
+      title: "KEEP MOVING",
+      desc: "Rounds are untimed, so each one is just about solving the equation and choosing the matching door.",
       render: () => (
-        <div style={{ width: 260 }}>
-          <Timer timeLeft={demoTime} maxTime={DEMO_MAX} />
+        <div style={{
+          width: 260, fontSize: 13, fontFamily: MONO, color: "var(--neon-green)", letterSpacing: 2,
+          padding: "12px 18px", borderRadius: 4, background: "var(--bg-deep)",
+          border: "1px solid var(--neon-green)22", textAlign: "center",
+        }}>
+          SOLVE THE EQUATION, THEN PICK A DOOR
         </div>
       ),
     },
     {
-      title: "LIVES & STREAKS",
-      desc: "You have 3 lives. Wrong answers or timeouts lose a life. Get 5 correct in a row to earn a bonus life (max 3). Streaks of 3+ give bonus points!",
+      title: "STREAKS",
+      desc: "Wrong answers break your streak, but you can keep going. Streaks of 3 or more give bonus points.",
       render: () => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <span style={{ fontSize: 12, fontFamily: MONO, color: "var(--text-dim)" }}>Lives:</span>
-            {[0, 1, 2].map(i => (
-              <span key={i} style={{ fontSize: 22, color: i < 2 ? "var(--neon-red)" : "var(--text-dim)", opacity: i < 2 ? 1 : 0.3 }}>
-                {i < 2 ? "\u25C6" : "\u25C7"}
-              </span>
-            ))}
-          </div>
           <div style={{
             fontSize: 12, fontFamily: MONO, letterSpacing: 3,
             color: "var(--neon-yellow)", padding: "6px 16px", borderRadius: 20,
@@ -173,15 +157,15 @@ export function TutorialScreen({ numeral, sound, onBack }) {
           }}>
             {"\uD83D\uDD25"} 5{"\u00D7"} STREAK
           </div>
-          <div style={{ fontSize: 11, fontFamily: MONO, color: "var(--neon-green)" }}>
-            {"\u2764\uFE0F"} +1 LIFE at 5-streak!
+          <div style={{ fontSize: 11, fontFamily: MONO, color: "var(--text-dim)" }}>
+            3+ correct in a row adds bonus points
           </div>
         </div>
       ),
     },
     {
       title: "SCORING",
-      desc: "Each correct answer earns 100 base points. Time remaining adds a bonus (time left × 6). Streaks of 3+ add n×12 bonus points.",
+      desc: "Each correct answer earns 100 base points. Streaks of 3 or more add n x 12 bonus points.",
       render: () => (
         <div style={{
           display: "flex", flexDirection: "column", gap: 10, alignItems: "center",
@@ -193,16 +177,12 @@ export function TutorialScreen({ numeral, sound, onBack }) {
               <div style={{ color: "var(--text-dim)", fontSize: 10 }}>BASE</div>
             </div>
             <div style={{ textAlign: "center", padding: "8px 12px", background: "var(--surface)", borderRadius: 4 }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--neon-purple)" }}>+42</div>
-              <div style={{ color: "var(--text-dim)", fontSize: 10 }}>TIME BONUS</div>
-            </div>
-            <div style={{ textAlign: "center", padding: "8px 12px", background: "var(--surface)", borderRadius: 4 }}>
               <div style={{ fontSize: 20, fontWeight: 700, color: "var(--neon-yellow)" }}>+36</div>
               <div style={{ color: "var(--text-dim)", fontSize: 10 }}>STREAK</div>
             </div>
           </div>
           <div style={{ color: "var(--text-dim)", fontSize: 11 }}>
-            = <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>178</span> total points
+            = <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>136</span> total points
           </div>
         </div>
       ),
