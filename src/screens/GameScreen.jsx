@@ -66,18 +66,6 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     roundStartTime.current = Date.now();
   }, [diff, stage]);
 
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "Escape") { togglePause(); return; }
-      if (paused) return;
-      const num = parseInt(e.key, 10);
-      if (!num || num < 1 || !eq || frozen || num > eq.options.length) return;
-      pick(num - 1);
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [eq, frozen, paused, togglePause]);
-
   const buildResult = (result) => ({
     score, stage, result,
     roundLog: roundLog.current,
@@ -147,6 +135,11 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       const toEliminate = wrongIdxs[Math.floor(Math.random() * wrongIdxs.length)];
       setEliminated(prev => [...prev, toEliminate]);
     }
+  };
+
+  const useOpenSesame = () => {
+    if (frozen || !eq) return;
+    pick(eq.correctIdx);
   };
 
   const handleEnter = () => {
@@ -335,26 +328,49 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       {/* Hint button + streak badge */}
       {!paused && (
         <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-          {/* Hint button */}
-          {!frozen && !hintUsed && (
-            <button onClick={useHint} style={{
-              fontSize: 11, fontFamily: MONO, letterSpacing: 2,
-              color: "var(--neon-purple)", padding: "4px 14px", borderRadius: 20,
-              background: "rgba(123,97,255,0.1)", border: "1px solid rgba(123,97,255,0.3)",
-              fontWeight: 700, transition: "all 0.2s",
-            }}
-              aria-label="Use hint: eliminates one wrong door, costs 50% time bonus"
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(123,97,255,0.2)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(123,97,255,0.1)"}
-            >
-              {"\uD83D\uDCA1"} HINT
-            </button>
-          )}
-          {hintUsed && !frozen && (
-            <span style={{ fontSize: 10, fontFamily: MONO, color: "var(--text-dim)", letterSpacing: 1 }}>
-              HINT USED
-            </span>
-          )}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+            {!frozen && !hintUsed && (
+              <button onClick={useHint} style={{
+                fontSize: 13, fontFamily: MONO, letterSpacing: 2,
+                color: "var(--neon-purple)", padding: "8px 20px", borderRadius: 22,
+                background: "rgba(123,97,255,0.1)", border: "1px solid rgba(123,97,255,0.3)",
+                fontWeight: 700, transition: "all 0.2s",
+              }}
+                aria-label="Use hint: eliminates one wrong door, costs 50% time bonus"
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(123,97,255,0.2)"}
+                onMouseLeave={e => e.currentTarget.style.background = "rgba(123,97,255,0.1)"}
+              >
+                {"\uD83D\uDCA1"} HINT
+              </button>
+            )}
+            {hintUsed && !frozen && (
+              <span style={{ fontSize: 10, fontFamily: MONO, color: "var(--text-dim)", letterSpacing: 1 }}>
+                HINT USED
+              </span>
+            )}
+            {!frozen && (
+              <button
+                onClick={useOpenSesame}
+                style={{
+                  fontSize: 13,
+                  fontFamily: MONO,
+                  letterSpacing: 2,
+                  color: "#E8D4C0",
+                  padding: "8px 20px",
+                  borderRadius: 22,
+                  background: "rgba(232,212,192,0.12)",
+                  border: "1px solid rgba(232,212,192,0.28)",
+                  fontWeight: 700,
+                  transition: "all 0.2s",
+                }}
+                aria-label="Open Sesame: automatically choose the correct answer and continue"
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(232,212,192,0.2)"}
+                onMouseLeave={e => e.currentTarget.style.background = "rgba(232,212,192,0.12)"}
+              >
+                OPEN SESAME
+              </button>
+            )}
+          </div>
 
           {/* Streak multiplier badge */}
           {streak >= 2 && (

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MONO } from "../appConstants";
 import { convertNumber } from "../numberStyles";
 
-export function GatewayCave({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3 }) {
+export function GatewayCave({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3, noAnimation = false }) {
   const isCorrect = state === "correct";
   const isWrong = state === "wrong";
   const [hov, setHov] = useState(false);
@@ -34,12 +34,14 @@ export function GatewayCave({ value, color, idx, onClick, state, disabled, numer
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        animation: isCorrect
-          ? "answerDoorSlideRight 0.65s ease-in forwards"
-          : !isCorrect && !isWrong && !eliminated
-            ? "caveGlow 4s ease-in-out infinite"
-            : "none",
-        transform: hov && !disabled && !isCorrect && !isWrong && !eliminated ? "translateY(-4px)" : "translateX(0)",
+        animation: noAnimation
+          ? "none"
+          : isCorrect
+            ? "answerDoorSlideRight 0.65s ease-in forwards"
+            : !isCorrect && !isWrong && !eliminated
+              ? "caveGlow 4s ease-in-out infinite"
+              : "none",
+        transform: !noAnimation && hov && !disabled && !isCorrect && !isWrong && !eliminated ? "translateY(-4px)" : "translateX(0)",
         transition: "transform 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.3s",
         boxShadow: isCorrect
           ? "0 10px 24px rgba(76,175,80,0.22), inset 0 0 12px rgba(255,255,255,0.08)"

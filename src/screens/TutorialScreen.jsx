@@ -85,14 +85,14 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       ),
     },
     {
-      title: "THE DOORS",
-      desc: "Below are colored doors, each with a number. Tap the one that equals the answer!",
+      title: "THE ROCKS",
+      desc: "Below are colored rocks, each with a number. Tap the rock that equals the answer!",
       render: () => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           {TRY_VALS.map((v, i) => (
             <GatewayCave
               key={i} value={v} color={NEON[i]} idx={i}
-              state="idle" disabled={true} numeral={numeral} doorCount={3}
+              state="idle" disabled={true} numeral={numeral} doorCount={3} noAnimation={true}
               onClick={() => {}}
             />
           ))}
@@ -114,7 +114,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
                   : "idle"
                 }
                 disabled={gotCorrect}
-                numeral={numeral} doorCount={3}
+                numeral={numeral} doorCount={3} noAnimation={true}
                 onClick={handleTryDoor}
               />
             ))}
@@ -183,53 +183,6 @@ export function TutorialScreen({ numeral, sound, onBack }) {
           </div>
           <div style={{ color: "var(--text-dim)", fontSize: 11 }}>
             = <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>136</span> total points
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "KEYBOARD SHORTCUTS",
-      desc: "Press number keys 1-4 to quickly select doors. Press Escape to pause or resume the game.",
-      render: () => (
-        <div style={{
-          display: "flex", flexDirection: "column", gap: 12, alignItems: "center",
-          fontFamily: MONO,
-        }}>
-          <div style={{ display: "flex", gap: 8 }}>
-            {[1, 2, 3, 4].map(n => (
-              <div key={n} style={{
-                width: 36, height: 36, borderRadius: 6,
-                border: "2px solid var(--neon-green)50",
-                background: "var(--surface)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 16, fontWeight: 700, color: "var(--neon-green)",
-              }}>{n}</div>
-            ))}
-          </div>
-          <div style={{ fontSize: 11, color: "var(--text-dim)", letterSpacing: 1 }}>
-            Select door 1-4
-          </div>
-          <div style={{
-            display: "flex", gap: 8, alignItems: "center", marginTop: 8,
-          }}>
-            <div style={{
-              padding: "6px 14px", borderRadius: 6,
-              border: "2px solid var(--neon-purple)50",
-              background: "var(--surface)",
-              fontSize: 12, fontWeight: 700, color: "var(--neon-purple)",
-            }}>ESC</div>
-            <span style={{ fontSize: 11, color: "var(--text-dim)" }}>Pause / Resume</span>
-          </div>
-          <div style={{
-            display: "flex", gap: 8, alignItems: "center",
-          }}>
-            <div style={{
-              padding: "6px 14px", borderRadius: 6,
-              border: "2px solid var(--neon-yellow)50",
-              background: "var(--surface)",
-              fontSize: 12, fontWeight: 700, color: "var(--neon-yellow)",
-            }}>{"\uD83D\uDCA1"}</div>
-            <span style={{ fontSize: 11, color: "var(--text-dim)" }}>Hint button: removes 1 wrong door</span>
           </div>
         </div>
       ),
