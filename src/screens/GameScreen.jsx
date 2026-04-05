@@ -25,7 +25,6 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
 
   const roundLog = useRef([]);
   const stageScores = useRef({});
-  const roundStartTime = useRef(0);
   const bestStreak = useRef(0);
   const totalCorrect = useRef(0);
   const totalWrong = useRef(0);
@@ -63,7 +62,6 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     setFrozen(false); setFeedback(""); setScoreBreakdown("");
     setAnsweredCorrectly(false);
     setHintUsed(false); setEliminated([]);
-    roundStartTime.current = Date.now();
   }, [diff, stage]);
 
   const buildResult = (result) => ({
@@ -72,7 +70,6 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     bestStreak: bestStreak.current,
     totalCorrect: totalCorrect.current,
     totalWrong: totalWrong.current,
-    totalTimeout: 0,
     stageScores: stageScores.current,
   });
 
@@ -89,7 +86,6 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const pick = (idx) => {
     if (frozen || eliminated.includes(idx)) return;
     setFrozen(true);
-    const timeTaken = (Date.now() - roundStartTime.current) / 1000;
     if (idx === eq.correctIdx) {
       setAnsweredCorrectly(true);
       const ns = streak + 1;
@@ -108,7 +104,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       setFeedback(ns >= 3 ? `\uD83D\uDD25 ${ns}\u00D7 STREAK  +${pts}` : `+${pts}`);
       sfxDoorUnlock(sound);
       totalCorrect.current++;
-      roundLog.current.push({ stage, round, result: "correct", timeTaken, points: pts });
+      roundLog.current.push({ stage, round, result: "correct", points: pts });
 
       setTimeout(() => setRound(r => r + 1), 1000);
     } else {
@@ -119,12 +115,12 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       setFeedback(`\u2717 WRONG \u2014 answer was ${convertNumber(eq.answer, numeral)}${reason ? "\n" + reason : ""}`);
       sfxWrong(sound);
       totalWrong.current++;
-      roundLog.current.push({ stage, round, result: "wrong", timeTaken });
+      roundLog.current.push({ stage, round, result: "wrong" });
       setTimeout(() => setRound(r => r + 1), 1300);
     }
   };
 
-  // Hint: eliminate one wrong door
+  // Hint: eliminate one wrong rock
   const useHint = () => {
     if (hintUsed || frozen || !eq) return;
     setHintUsed(true);
@@ -327,7 +323,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
 
       {/* Hint button + streak badge */}
       {!paused && (
-        <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center", justifyContent: "center", minHeight: 96 }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
             {!frozen && !hintUsed && (
               <button onClick={useHint} style={{
@@ -336,7 +332,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
                 background: "rgba(123,97,255,0.1)", border: "1px solid rgba(123,97,255,0.3)",
                 fontWeight: 700, transition: "all 0.2s",
               }}
-                aria-label="Use hint: eliminates one wrong door, costs 50% time bonus"
+                aria-label="Use hint: eliminates one wrong rock"
                 onMouseEnter={e => e.currentTarget.style.background = "rgba(123,97,255,0.2)"}
                 onMouseLeave={e => e.currentTarget.style.background = "rgba(123,97,255,0.1)"}
               >
@@ -378,6 +374,10 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
               fontSize: 11, fontFamily: MONO, letterSpacing: 3,
               color: "var(--neon-yellow)",
               padding: "4px 14px", borderRadius: 20,
+              minHeight: 30,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               background: streak >= 5
                 ? "linear-gradient(90deg, rgba(255,209,102,0.15), rgba(254,95,85,0.15))"
                 : "rgba(255,209,102,0.1)",

@@ -91,9 +91,3 @@ function generatePedagogicalDistractors(answer, op, a, b) {
   return distractors.filter(d => d.value >= 0);
 }
 
-export function timeForRound(diff, stageId) {
-  const c = DIFF[diff];
-  let t = c.time;
-  if (stageId >= 3) t *= c.timeShrink;
-  return Math.round(Math.max(4, t) * 10) / 10;
-}

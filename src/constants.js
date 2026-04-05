@@ -7,8 +7,8 @@ export const DIFF = {
 
 export const STAGES = [
   { id: 1, name: "ENTRANCE",  rounds: 5,  color: "#FFD700", tagline: "Warm up your neurons" },
-  { id: 2, name: "CORRIDOR",  rounds: 7,  color: "#FF9500", tagline: "Numbers grow, time holds" },
-  { id: 3, name: "VAULT",     rounds: 10, color: "#E85D3F", tagline: "Think fast or fall" },
+  { id: 2, name: "CORRIDOR",  rounds: 7,  color: "#FF9500", tagline: "Numbers grow, paths deepen" },
+  { id: 3, name: "VAULT",     rounds: 10, color: "#E85D3F", tagline: "Think sharp and push forward" },
 ];
 
 export const NEON = ["#FFD700","#FF9500","#E85D3F","#E8A84B"];

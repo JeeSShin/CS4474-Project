@@ -57,7 +57,7 @@ export default function App() {
   }, [diff, sound, numeral, reduceMotion]);
 
   useEffect(() => {
-    document.title = "Open Sesame: Math Doors";
+    document.title = "Open Sesame: Math Rocks";
     if (mainRef.current) {
       mainRef.current.focus();
     }

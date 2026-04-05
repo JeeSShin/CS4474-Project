@@ -15,7 +15,7 @@ export function GatewayCave({ value, color, idx, onClick, state, disabled, numer
     <button
       onClick={() => !disabled && !eliminated && onClick(idx)}
       disabled={disabled || eliminated}
-      aria-label={`Door ${idx + 1}, answer ${value}`}
+      aria-label={`Rock ${idx + 1}, answer ${value}`}
       aria-disabled={disabled || eliminated}
       onMouseEnter={() => !disabled && !eliminated && setHov(true)}
       onMouseLeave={() => setHov(false)}

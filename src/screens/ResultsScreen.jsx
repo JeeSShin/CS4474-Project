@@ -97,32 +97,26 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
     return () => cancelAnimationFrame(raf.current);
   }, [data.score]);
 
-  const { correct, wrong, timeouts, accuracy, avgTime, bestStreakVal, stageBreakdown } = useMemo(() => {
+  const { correct, wrong, accuracy, bestStreakVal, stageBreakdown } = useMemo(() => {
     const log = data.roundLog ?? [];
     const c = data.totalCorrect ?? log.filter(r => r.result === "correct").length;
     const w = data.totalWrong ?? log.filter(r => r.result === "wrong").length;
-    const t = data.totalTimeout ?? log.filter(r => r.result === "timeout").length;
-    const total = c + w + t;
+    const total = c + w;
     const acc = total > 0 ? Math.round((c / total) * 100) : 0;
-    const avg = log.length > 0
-      ? (log.filter(r => r.result === "correct").reduce((s, r) => s + r.timeTaken, 0) / Math.max(1, c)).toFixed(1)
-      : "—";
     const breakdown = {};
     for (const r of log) {
       if (!breakdown[r.stage]) breakdown[r.stage] = { correct: 0, total: 0 };
       breakdown[r.stage].total++;
       if (r.result === "correct") breakdown[r.stage].correct++;
     }
-    return { correct: c, wrong: w, timeouts: t, accuracy: acc, avgTime: avg, bestStreakVal: data.bestStreak ?? 0, stageBreakdown: breakdown };
+    return { correct: c, wrong: w, accuracy: acc, bestStreakVal: data.bestStreak ?? 0, stageBreakdown: breakdown };
   }, [data]);
 
-  // Only true when this run's score strictly exceeds all previous scores
   const prevBest = highScores.length > 1 ? highScores[1]?.score : 0;
   const isNewHighScore = highScores.length > 0 && highScores[0]?.score === data.score && data.score > (prevBest ?? 0);
 
   return (
     <div style={{ textAlign: "center", paddingTop: 40, animation: "fadeUp 0.6s ease-out" }}>
-
       {win ? (
         <div>
           <DoorOpenVisual color="var(--neon-green)" />
@@ -143,7 +137,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         {win ? "Every gateway conquered." : `Reached Stage ${data.stage}`}
       </p>
 
-      {/* New high score celebration */}
       {isNewHighScore && (
         <div style={{
           fontSize: 14, fontFamily: MONO, fontWeight: 700, letterSpacing: 3,
@@ -152,7 +145,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         }}>{"\u2B50"} NEW HIGH SCORE! {"\u2B50"}</div>
       )}
 
-      {/* Score display */}
       <div style={{ position: "relative" }}>
         {data.score > 0 && (
           <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--text-dim)", marginBottom: 4 }}>
@@ -166,7 +158,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         }}>{displayScore.toLocaleString()}</div>
       </div>
 
-      {/* Performance breakdown */}
       <div style={{
         display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap",
         marginBottom: 16, animation: "fadeUp 0.5s ease-out 0.4s both",
@@ -174,11 +165,9 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         <StatBox label="ACCURACY" value={`${accuracy}%`} color={accuracy >= 80 ? "var(--neon-green)" : accuracy >= 50 ? "var(--neon-yellow)" : "var(--neon-red)"} />
         <StatBox label="CORRECT" value={correct} color="var(--neon-green)" />
         <StatBox label="WRONG" value={wrong} color="var(--neon-red)" />
-        <StatBox label="AVG TIME" value={`${avgTime}s`} color="var(--neon-purple)" />
         <StatBox label="BEST STREAK" value={bestStreakVal} color="var(--neon-yellow)" />
       </div>
 
-      {/* Per-stage breakdown bars */}
       {Object.keys(stageBreakdown).length > 0 && (
         <div style={{
           maxWidth: 340, margin: "0 auto 20px", display: "flex", flexDirection: "column", gap: 6,
@@ -190,7 +179,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         </div>
       )}
 
-      {/* Personal best from high scores */}
       {highScores.length > 0 && (
         <div style={{
           fontSize: 11, fontFamily: MONO, color: "var(--text-dim)", marginBottom: 16,
@@ -202,7 +190,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         </div>
       )}
 
-      {/* Action buttons */}
       <div style={{
         display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
         animation: "fadeUp 0.5s ease-out 0.6s both",

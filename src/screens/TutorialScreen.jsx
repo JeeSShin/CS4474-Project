@@ -101,7 +101,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     },
     {
       title: "TRY IT!",
-      desc: `${convertDisplay("8 + 14", numeral)} = ? Pick the right door below. You can try again!`,
+      desc: `${convertDisplay("8 + 14", numeral)} = ? Pick the right rock below. You can try again!`,
       render: () => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", gap: 12 }}>
@@ -126,7 +126,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
           )}
           {tryPicked !== null && !gotCorrect && (
             <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--neon-red)", letterSpacing: 1 }}>
-              Try again - pick another door
+              Try again - pick another rock
             </div>
           )}
         </div>
@@ -134,55 +134,43 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     },
     {
       title: "KEEP MOVING",
-      desc: "Rounds are untimed, so each one is just about solving the equation and choosing the matching door.",
+      desc: "Each round is about solving the equation and choosing the matching rock.",
       render: () => (
         <div style={{
           width: 260, fontSize: 13, fontFamily: MONO, color: "var(--neon-green)", letterSpacing: 2,
           padding: "12px 18px", borderRadius: 4, background: "var(--bg-deep)",
           border: "1px solid var(--neon-green)22", textAlign: "center",
         }}>
-          SOLVE THE EQUATION, THEN PICK A DOOR
+          SOLVE THE EQUATION, THEN PICK A ROCK
         </div>
       ),
     },
     {
-      title: "STREAKS",
-      desc: "Wrong answers break your streak, but you can keep going. Streaks of 3 or more give bonus points.",
+      title: "OPEN SESAME",
+      desc: "Need help? OPEN SESAME automatically picks the correct rock and moves you to the next round.",
       render: () => (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{
-            fontSize: 12, fontFamily: MONO, letterSpacing: 3,
-            color: "var(--neon-yellow)", padding: "6px 16px", borderRadius: 20,
-            background: "rgba(255,209,102,0.1)", border: "1px solid rgba(255,209,102,0.25)",
-          }}>
-            {"\uD83D\uDD25"} 5{"\u00D7"} STREAK
-          </div>
-          <div style={{ fontSize: 11, fontFamily: MONO, color: "var(--text-dim)" }}>
-            3+ correct in a row adds bonus points
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "SCORING",
-      desc: "Each correct answer earns 100 base points. Streaks of 3 or more add n x 12 bonus points.",
-      render: () => (
-        <div style={{
-          display: "flex", flexDirection: "column", gap: 10, alignItems: "center",
-          fontFamily: MONO, fontSize: 12,
-        }}>
-          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
-            <div style={{ textAlign: "center", padding: "8px 12px", background: "var(--surface)", borderRadius: 4 }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--neon-green)" }}>+100</div>
-              <div style={{ color: "var(--text-dim)", fontSize: 10 }}>BASE</div>
-            </div>
-            <div style={{ textAlign: "center", padding: "8px 12px", background: "var(--surface)", borderRadius: 4 }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--neon-yellow)" }}>+36</div>
-              <div style={{ color: "var(--text-dim)", fontSize: 10 }}>STREAK</div>
-            </div>
-          </div>
-          <div style={{ color: "var(--text-dim)", fontSize: 11 }}>
-            = <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>136</span> total points
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
+          <button
+            disabled
+            style={{
+              fontSize: 13,
+              fontFamily: MONO,
+              letterSpacing: 2,
+              color: "#E8D4C0",
+              padding: "8px 20px",
+              borderRadius: 22,
+              background: "rgba(232,212,192,0.12)",
+              border: "1px solid rgba(232,212,192,0.28)",
+              fontWeight: 700,
+              opacity: 0.95,
+            }}
+          >
+            OPEN SESAME
+          </button>
+          <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--text-dim)", textAlign: "center", lineHeight: 1.6 }}>
+            Uses the correct answer for you
+            <br />
+            and continues right away
           </div>
         </div>
       ),
