@@ -12,13 +12,13 @@ export const globalCSS = `
 :root {
   --bg: #0A0E14;
   --bg-deep: #060A10;
-  --surface: rgba(255,255,255,0.03);
-  --surface2: rgba(255,255,255,0.06);
-  --surface-raised: rgba(255,255,255,0.09);
+  --surface: rgba(255, 215, 0, 0.5);
+  --surface2: rgba(255, 215, 0 , 0.5);
+  --surface-raised: rgba(255,255,255,0.25);
   --text: #D8DDE8;
   --text-dim: #6B7A94;
   --border: rgba(255,255,255,0.08);
-  --neon-green: #FFD700;
+  --neon-green:rgb(255, 215, 0);
   --neon-purple: #FF9500;
   --neon-red: #E85D3F;
   --neon-yellow: #E8A84B;
