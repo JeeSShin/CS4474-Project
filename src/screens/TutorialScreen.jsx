@@ -205,7 +205,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
 
       <div key={step} style={{
         background: "var(--surface-raised)", borderRadius: 4, padding: "32px 24px",
-        maxWidth: 480, margin: "0 auto", minHeight: 320,
+        maxWidth: 480, margin: "0 auto", height: 320,
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18,
         border: "1px solid var(--border)",
         borderTop: "2px solid var(--neon-yellow)",
@@ -219,8 +219,10 @@ export function TutorialScreen({ numeral, sound, onBack }) {
         <p style={{ color: "var(--text-dim)", lineHeight: 1.6, fontSize: 14, maxWidth: 340, textAlign: "center" }}>{s.desc}</p>
       </div>
 
-      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 20 }}>
-        {step > 0 && <Btn onClick={() => goTo(step - 1)} color="#6B7A94">{"\u2190"} Prev</Btn>}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 20, minWidth: 240 }}>
+        <div style={{ visibility: step > 0 ? "visible" : "hidden" }}>
+          <Btn onClick={() => goTo(step - 1)} color="#6B7A94">{"\u2190"} Prev</Btn>
+        </div>
         {step < steps.length - 1
           ? <Btn onClick={() => goTo(step + 1)} color="#00F5D4">Next {"\u2192"}</Btn>
           : <Btn onClick={onBack} color="#00F5D4">Got it!</Btn>
