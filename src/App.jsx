@@ -91,6 +91,17 @@ export default function App() {
 
   const navigate = useCallback((s) => { sfxNav(sound); setScreen(s); }, [sound]);
 
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key !== "Escape") return;
+      if (!["settings", "tutorial", "stages", "results"].includes(screen)) return;
+      e.preventDefault();
+      navigate("menu");
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [screen, navigate]);
+
   const accentColor = screen === "game" ? (STAGES[(startStage || 1) - 1]?.color || "#FFD700") : "#FFD700";
 
   return (
