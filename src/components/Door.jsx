@@ -1,8 +1,8 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { MONO } from "../appConstants";
-import { convertNumber } from "../numerals";
+import { convertNumber } from "../numberStyles";
 
-export function GatewayDoor({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3 }) {
+export function Door({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3 }) {
   const isCorrect = state === "correct";
   const isWrong = state === "wrong";
   const [hov, setHov] = useState(false);
@@ -242,7 +242,7 @@ export function GatewayDoor({ value, color, idx, onClick, state, disabled, numer
           <span style={{
             fontSize: 60, fontWeight: 900, fontFamily: MONO, lineHeight: 1,
             color: "#F44336",
-          }}>✕</span>
+          }}>??/span>
         </div>
       )}
 
@@ -287,7 +287,7 @@ export function GatewayDoor({ value, color, idx, onClick, state, disabled, numer
             fontSize: 14,
             color: "#5a5047",
             lineHeight: 1,
-          }}>🔒</span>
+          }}>?뵏</span>
         </div>
       )}
 
@@ -311,3 +311,4 @@ export function GatewayDoor({ value, color, idx, onClick, state, disabled, numer
     </button>
   );
 }
+

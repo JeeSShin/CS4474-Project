@@ -2,10 +2,9 @@
 import { DIFF, STAGES, FONT } from "./appConstants";
 import { globalCSS } from "./styles";
 import { sfxNav } from "./sound";
-import { RealisticCaveBG } from "./components/RealisticCaveBG";
+import { CaveBG } from "./components/CaveBG";
 import { MenuScreen } from "./screens/MenuScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
-import { StageSelectScreen } from "./screens/StageSelectScreen";
 import { TutorialScreen } from "./screens/TutorialScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { ResultsScreen } from "./screens/ResultsScreen";
@@ -33,7 +32,6 @@ export default function App() {
   const [gameKey, setGameKey] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(() => loadStorage("eq-gateway-settings", null)?.reduceMotion ?? false);
   const [highScores, setHighScores] = useState(() => loadStorage("eq-gateway-highscores", []));
-  const [stageBests, setStageBests] = useState(() => loadStorage("eq-gateway-stagebests", {}));
   const mainRef = useRef(null);
   const [returning] = useState(() => {
     try { return localStorage.getItem("eq-gateway-visited") === "1"; } catch { return false; }
@@ -64,18 +62,6 @@ export default function App() {
       return updated;
     });
 
-    if (r.stageScores) {
-      setStageBests(prev => {
-        const newBests = { ...prev };
-        for (const [stId, sc] of Object.entries(r.stageScores)) {
-          const key = `${diff}-${stId}`;
-          if (!newBests[key] || sc > newBests[key]) newBests[key] = sc;
-        }
-        saveStorage("eq-gateway-stagebests", newBests);
-        return newBests;
-      });
-    }
-
     setResult(r);
     setScreen("results");
   }, [diff]);
@@ -85,7 +71,7 @@ export default function App() {
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key !== "Escape") return;
-      if (!["settings", "tutorial", "stages", "results"].includes(screen)) return;
+      if (!["settings", "tutorial", "results"].includes(screen)) return;
       e.preventDefault();
       navigate("menu");
     };
@@ -106,7 +92,7 @@ export default function App() {
 
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
-      <RealisticCaveBG accentColor={accentColor} running={screen === "game"} />
+      <CaveBG accentColor={accentColor} running={screen === "game"} />
 
       <main id="main-content" ref={mainRef} tabIndex={-1}
         style={{ width: "100%", maxWidth: 600, position: "relative", zIndex: 1, outline: "none" }}>
@@ -119,10 +105,6 @@ export default function App() {
           <SettingsScreen diff={diff} setDiff={setDiff}
             numeral={numeral} setNumeral={setNumeral}
             onBack={() => navigate("menu")} />
-        )}
-        {screen === "stages" && (
-          <StageSelectScreen onSelect={(s) => startGame(s)} onBack={() => navigate("menu")}
-            stageBests={stageBests} diff={diff} />
         )}
         {screen === "tutorial" && <TutorialScreen numeral={numeral} sound={sound} onBack={() => navigate("menu")} />}
         {screen === "game" && (
@@ -141,3 +123,4 @@ export default function App() {
     </SoundContext.Provider>
   );
 }
+

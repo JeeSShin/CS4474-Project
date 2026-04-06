@@ -1,8 +1,8 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { MONO } from "../appConstants";
 import { convertNumber } from "../numberStyles";
 
-export function GatewayCave({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3, noAnimation = false }) {
+export function Cave({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3, noAnimation = false }) {
   const isCorrect = state === "correct";
   const isWrong = state === "wrong";
   const [hov, setHov] = useState(false);
@@ -282,3 +282,4 @@ export function GatewayCave({ value, color, idx, onClick, state, disabled, numer
     </button>
   );
 }
+

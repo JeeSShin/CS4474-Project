@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+﻿import { useState, useEffect, useCallback, useRef } from "react";
 import { DIFF, STAGES, NEON, MONO, DISPLAY } from "../appConstants";
 import { makeEquation } from "../mathEngine";
 import { convertDisplay, convertNumber } from "../numberStyles";
 import { sfxDoorUnlock, sfxFootstep, sfxWrong } from "../sound";
-import { GatewayCave } from "../components/GatewayCave";
+import { Cave } from "../components/Cave";
 import { Btn } from "../components/button";
 
 export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit }) {
@@ -227,7 +227,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const isBadFeedback = feedback.startsWith("\u2717") || feedback.startsWith("\u23F1");
   const hasCorrectSelection = answeredCorrectly;
 
-  // Equation display font — min 28px
+  // Equation display font ??min 28px
   const eqDisplay = convertDisplay(eq.display, numeral);
   const eqFontSize = Math.max(28, eqDisplay.length > 20 ? 28 : eqDisplay.length > 14 ? 30 : 40);
 
@@ -288,7 +288,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
         </button>
       </div>
 
-      {/* Equation screen panel — hidden when paused */}
+      {/* Equation screen panel ??hidden when paused */}
       {paused ? (
         <div style={{
           fontSize: 18, fontWeight: 700, fontFamily: MONO, color: "var(--text-dim)",
@@ -332,14 +332,14 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
         )}
       </div>
 
-      {/* Door area — hidden when paused */}
+      {/* Door area ??hidden when paused */}
       {!paused && (
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
           {eq.options
             .map((v, i) => ({ v, i }))
             .filter(({ i }) => !hasCorrectSelection || i === eq.correctIdx)
             .map(({ v, i }) => (
-              <GatewayCave
+              <Cave
                 key={`${round}-${i}`}
                 value={v}
                 color={NEON[i % NEON.length]}
@@ -444,3 +444,4 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     </div>
   );
 }
+

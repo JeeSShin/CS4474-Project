@@ -2,7 +2,7 @@
 import { NEON, FONT, MONO, DISPLAY } from "../appConstants";
 import { convertDisplay } from "../numberStyles";
 import { Btn } from "../components/button";
-import { GatewayCave } from "../components/GatewayCave";
+import { Cave } from "../components/Cave";
 import { sfxCorrect, sfxWrong } from "../sound";
 
 const TRY_VALS = [20, 22, 24];
@@ -90,7 +90,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       render: () => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           {TRY_VALS.map((v, i) => (
-            <GatewayCave
+            <Cave
               key={i} value={v} color={NEON[i]} idx={i}
               state="idle" disabled={true} numeral={numeral} doorCount={3} noAnimation={true}
               onClick={() => {}}
@@ -106,7 +106,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", gap: 12 }}>
             {TRY_VALS.map((v, i) => (
-              <GatewayCave
+              <Cave
                 key={i} value={v} color={NEON[i]} idx={i}
                 state={
                   gotCorrect && v === CORRECT_VAL ? "correct"
@@ -175,43 +175,6 @@ export function TutorialScreen({ numeral, sound, onBack }) {
         </div>
       ),
     },
-    {
-      title: "RESULTS SCREEN",
-      desc: "At the end, the results screen shows your final score, accuracy, correct and wrong answers, best streak, and stage progress.",
-      render: () => (
-        <div style={{
-          width: 280, padding: "16px 18px", borderRadius: 6,
-          background: "var(--bg-deep)", border: "1px solid var(--border)",
-          boxShadow: "inset 0 0 40px rgba(255,209,102,0.05)",
-          display: "flex", flexDirection: "column", gap: 10,
-        }}>
-          <div style={{
-            fontSize: 14, fontFamily: DISPLAY, letterSpacing: 2,
-            color: "var(--neon-yellow)", textAlign: "center",
-          }}>TREASURE FOUND</div>
-          <div style={{
-            fontSize: 28, fontFamily: DISPLAY, fontWeight: 700,
-            color: "var(--neon-yellow)", textAlign: "center",
-          }}>1,250</div>
-          <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-            {[
-              ["ACCURACY", "90%", "var(--neon-green)"],
-              ["CORRECT", "9", "var(--neon-green)"],
-              ["WRONG", "1", "var(--neon-red)"],
-              ["STREAK", "5", "var(--neon-yellow)"],
-            ].map(([label, value, color]) => (
-              <div key={label} style={{
-                minWidth: 58, padding: "6px 8px", textAlign: "center",
-                borderRadius: 4, background: "var(--surface)", border: "1px solid var(--border)",
-              }}>
-                <div style={{ fontSize: 16, fontFamily: DISPLAY, fontWeight: 700, color }}>{value}</div>
-                <div style={{ fontSize: 9, fontFamily: MONO, color: "var(--text-dim)", letterSpacing: 1 }}>{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ),
-    },
   ];
 
   const s = steps[step];
@@ -254,3 +217,4 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     </div>
   );
 }
+

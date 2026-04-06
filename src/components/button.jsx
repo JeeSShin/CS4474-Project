@@ -10,7 +10,6 @@ import { sfxClick } from "../sound";
 export function Btn({ children, onClick, color = "#FFD700", style: extra = {}, big }) {
   const soundOn = useContext(SoundContext);
   const [pressed, setPressed] = useState(false);
-
   return (
     <button
       onClick={(e) => {
