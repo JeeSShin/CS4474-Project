@@ -6,6 +6,7 @@ import { sfxDoorUnlock, sfxFootstep, sfxWrong } from "../sound";
 import { Cave } from "../components/Cave";
 import { Btn } from "../components/button";
 
+// Main gameplay screen - handles rounds, scoring, and door selection
 export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit }) {
   const [stage, setStage] = useState(startStage);
   const [round, setRound] = useState(0);
@@ -23,6 +24,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const [eliminated, setEliminated] = useState([]);
   const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
 
+  // Persistent refs for tracking stats across re-renders
   const roundLog = useRef([]);
   const stageScores = useRef({});
   const bestStreak = useRef(0);
@@ -56,6 +58,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     totalWrong.current = 0;
   };
 
+  // Generates a new equation and resets round state
   const next = useCallback(() => {
     const e = makeEquation(diff, stage);
     setEq(e); setDoorSt(e.options.map(() => "idle"));
@@ -64,6 +67,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     setHintUsed(false); setEliminated([]);
   }, [diff, stage]);
 
+  // Builds final result object for end-of-game screen
   const buildResult = (result) => ({
     score, stage, result,
     roundLog: roundLog.current,
@@ -83,6 +87,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     next();
   }, [round, intro]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Handles door selection - checks answer, updates score, advances round
   const pick = (idx) => {
     if (frozen || eliminated.includes(idx)) return;
     setFrozen(true);
@@ -123,7 +128,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
   const pickRef = useRef(pick);
   pickRef.current = pick;
 
-  // Hint: eliminate one wrong cave
+  // Hint: eliminates one random wrong door
   const useHint = useCallback(() => {
     if (hintUsed || frozen || !eq) return;
     setHintUsed(true);
@@ -167,11 +172,13 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [intro, paused, eq, doorCount, hintUsed, frozen, useHint]);
 
+  // Open Sesame: auto-selects the correct answer
   const useOpenSesame = () => {
     if (frozen || !eq) return;
     pick(eq.correctIdx);
   };
 
+  // Transitions from stage intro to gameplay with door animation
   const handleEnter = () => {
     sfxFootstep(sound);
     setExiting(true);

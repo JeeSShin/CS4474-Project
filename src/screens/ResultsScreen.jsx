@@ -2,6 +2,7 @@
 import { STAGES, MONO, DISPLAY } from "../appConstants";
 import { Btn } from "../components/button";
 
+// Animated treasure chest icon for win state
 function TreasureFoundVisual({ color }) {
   return (
     <div style={{
@@ -51,6 +52,7 @@ function TreasureFoundVisual({ color }) {
   );
 }
 
+// Locked gate icon for lose state
 function LockedGateVisual({ color }) {
   return (
     <div style={{
@@ -67,6 +69,7 @@ function LockedGateVisual({ color }) {
   );
 }
 
+// Displays a single stat with label and colored value
 function StatBox({ label, value, color = "var(--neon-green)" }) {
   return (
     <div style={{
@@ -79,6 +82,7 @@ function StatBox({ label, value, color = "var(--neon-green)" }) {
   );
 }
 
+// Progress bar showing correct/total for a stage
 function StageBar({ stageId, correct, total }) {
   const s = STAGES[stageId - 1];
   if (!s) return null;
@@ -99,11 +103,13 @@ function StageBar({ stageId, correct, total }) {
   );
 }
 
+// End-of-game results with animated score, stats, and stage breakdown
 export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highScores = [] }) {
   const win = data.result === "win";
   const [displayScore, setDisplayScore] = useState(0);
   const raf = useRef(null);
 
+  // Animated score counter with easing
   useEffect(() => {
     const target = data.score;
     const duration = 1500;
@@ -119,6 +125,7 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
     return () => cancelAnimationFrame(raf.current);
   }, [data.score]);
 
+  // Calculate stats from round log data
   const { correct, wrong, accuracy, bestStreakVal, stageBreakdown } = useMemo(() => {
     const log = data.roundLog ?? [];
     const c = data.totalCorrect ?? log.filter(r => r.result === "correct").length;

@@ -1,9 +1,11 @@
+// Web Audio API context for synthesized sounds
 let _ctx = null;
+// Cache for preloaded audio file elements
 let _audioCache = {};
 
+// Plays an audio file with caching for repeated playback
 function playAudioFile(filename) {
   try {
-    // Use HTML5 Audio element for simpler, more reliable playback
     if (!_audioCache[filename]) {
       const audio = new Audio(`/${filename}`);
       audio.preload = "auto";
@@ -19,6 +21,7 @@ function playAudioFile(filename) {
   }
 }
 
+// Generates a synthesized tone using Web Audio API oscillator
 function beep(freq, dur, type = "sine", vol = 0.09) {
   try {
     if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -30,6 +33,7 @@ function beep(freq, dur, type = "sine", vol = 0.09) {
   } catch {}
 }
 
+// Sound effect functions - each takes an 'on' flag to enable/disable audio
 export function sfxCorrect(on) { if (!on) return; beep(520, 0.1); setTimeout(() => beep(660, 0.1), 80); setTimeout(() => beep(880, 0.15), 160); }
 export function sfxDoorUnlock(on) { 
   if (!on) return;

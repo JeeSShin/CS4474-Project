@@ -1,12 +1,8 @@
-/*
-*Name: button.jsx
-*Description: A reusable button component with consistent styling and sound effects.
-*Date: 2024-06
-*/
 import { useState, useContext } from "react";
 import { SoundContext } from "../App";
 import { sfxClick } from "../sound";
 
+// Reusable button with cave-themed styling, click sound, and press animation
 export function Btn({ children, onClick, color = "#FFD700", style: extra = {}, big }) {
   const soundOn = useContext(SoundContext);
   const [pressed, setPressed] = useState(false);

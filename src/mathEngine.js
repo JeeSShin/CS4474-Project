@@ -1,7 +1,9 @@
 ﻿import { DIFF } from "./appConstants";
 
+// Returns a random integer in range [a, b] inclusive
 const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
+// Generates a math equation based on difficulty and stage, returns question with answer options
 export function makeEquation(diff, stageId) {
   const c = DIFF[diff];
   let lo = c.lo, hi = c.hi;
@@ -29,6 +31,7 @@ export function makeEquation(diff, stageId) {
   return buildQuestion(`${a} ${op} ${b}`, ans, c.doors, op, a, b);
 }
 
+// Builds a question object with shuffled answer options and distractor reasons
 function buildQuestion(display, answer, doorCount, op, a, b) {
   const opts = new Set([answer]);
   const reasonMap = {};
@@ -51,6 +54,7 @@ function buildQuestion(display, answer, doorCount, op, a, b) {
   return { display, answer, options: shuffled, correctIdx: shuffled.indexOf(answer), reasonMap };
 }
 
+// Creates wrong answers based on common mistakes (off-by-one, operation confusion)
 function generatePedagogicalDistractors(answer, op, a, b) {
   const distractors = [];
   if (a === undefined || b === undefined || !op) return distractors;

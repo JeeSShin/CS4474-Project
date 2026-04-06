@@ -2,6 +2,7 @@ import { DIFF, FONT, MONO, DISPLAY } from "../appConstants";
 import { NUMERAL_SYSTEMS } from "../numberStyles";
 import { Btn } from "../components/button";
 
+// Container for a settings group with colored accent bar
 function SettingPanel({ title, accentColor = "var(--neon-green)", children }) {
   return (
     <div style={{
@@ -22,6 +23,7 @@ function SettingPanel({ title, accentColor = "var(--neon-green)", children }) {
   );
 }
 
+// Selectable option button with checkmark indicator
 function OptionCard({ selected, onClick, color = "var(--neon-green)", children }) {
   return (
     <button onClick={onClick}
@@ -47,6 +49,7 @@ function OptionCard({ selected, onClick, color = "var(--neon-green)", children }
   );
 }
 
+// Settings page for difficulty and number style preferences
 export function SettingsScreen({
   diff,
   setDiff,

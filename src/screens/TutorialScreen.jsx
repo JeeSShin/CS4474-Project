@@ -5,9 +5,11 @@ import { Btn } from "../components/button";
 import { Cave } from "../components/Cave";
 import { sfxCorrect, sfxWrong } from "../sound";
 
+// Interactive tutorial demo values
 const TRY_VALS = [20, 22, 24];
 const CORRECT_VAL = 22;
 
+// Visual step indicator with connected dots
 function ProgressDots({ current, total }) {
   return (
     <div
@@ -45,12 +47,14 @@ function ProgressDots({ current, total }) {
   );
 }
 
+// Multi-step tutorial with interactive door-picking demo
 export function TutorialScreen({ numeral, sound, onBack }) {
   const [step, setStep] = useState(0);
   const [dir, setDir] = useState("slideLeft");
   const [tryPicked, setTryPicked] = useState(null);
   const [gotCorrect, setGotCorrect] = useState(false);
 
+  // Navigate between steps with slide animation direction
   const goTo = (newStep) => {
     setDir(newStep > step ? "slideLeft" : "slideRight");
     setStep(newStep);
@@ -58,6 +62,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     setGotCorrect(false);
   };
 
+  // Handles door selection in the interactive "Try It" step
   function handleTryDoor(i) {
     if (gotCorrect) return;
     if (TRY_VALS[i] === CORRECT_VAL) {
@@ -70,6 +75,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     }
   }
 
+  // Tutorial content for each step: title, description, and visual component
   const steps = [
     {
       title: "THE EQUATION",

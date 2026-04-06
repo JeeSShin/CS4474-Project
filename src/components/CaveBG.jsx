@@ -1,8 +1,4 @@
-﻿/*
-*Name:CaveBG.jsx
-*Description: cave background component such as effects and animations.
-*Date: 2024-06
-*/
+﻿// Full-screen cave background with image, overlays, and accent color glow
 export function CaveBG({ accentColor = "#FFD700", running }) {
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>

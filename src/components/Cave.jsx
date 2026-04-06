@@ -2,11 +2,13 @@
 import { MONO } from "../appConstants";
 import { convertNumber } from "../numberStyles";
 
+// Cave door button with answer value, visual states (correct/wrong/eliminated), and animations
 export function Cave({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3, noAnimation = false }) {
   const isCorrect = state === "correct";
   const isWrong = state === "wrong";
   const [hov, setHov] = useState(false);
 
+  // Convert value to current numeral system and calculate responsive sizing
   const label = convertNumber(value, numeral);
   const fontSize = label.length <= 3 ? 62 : label.length <= 5 ? 48 : label.length <= 7 ? 36 : 28;
   const caveWidth = `min(180px, calc((100vw - 80px) / ${doorCount}))`;

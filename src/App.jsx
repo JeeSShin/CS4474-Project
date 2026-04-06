@@ -9,8 +9,10 @@ import { TutorialScreen } from "./screens/TutorialScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { ResultsScreen } from "./screens/ResultsScreen";
 
+// Context to share sound setting with child components
 export const SoundContext = createContext(true);
 
+// LocalStorage helpers with error handling
 function loadStorage(key, fallback) {
   try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
   catch { return fallback; }
@@ -19,6 +21,7 @@ function saveStorage(key, data) {
   try { localStorage.setItem(key, JSON.stringify(data)); } catch {}
 }
 
+// Main app component - manages screens, settings, and game state
 export default function App() {
   const [screen, setScreen] = useState("menu");
   const [diff, setDiff] = useState(() => {
@@ -52,8 +55,10 @@ export default function App() {
     }
   }, [screen]);
 
+  // Starts a new game from specified stage, increments key to force remount
   const startGame = (st = 1) => { setStartStage(st); setGameKey(k => k + 1); setScreen("game"); };
 
+  // Saves score to high scores and navigates to results screen
   const handleFinish = useCallback((r) => {
     const entry = { score: r.score, diff, date: new Date().toISOString(), stages: r.stage, result: r.result };
     setHighScores(prev => {
@@ -66,8 +71,10 @@ export default function App() {
     setScreen("results");
   }, [diff]);
 
+  // Navigates between screens with sound effect
   const navigate = useCallback((s) => { sfxNav(sound); setScreen(s); }, [sound]);
 
+  // Escape key returns to menu from secondary screens
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key !== "Escape") return;

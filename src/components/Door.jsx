@@ -2,15 +2,15 @@
 import { MONO } from "../appConstants";
 import { convertNumber } from "../numberStyles";
 
+// Alternative door component with cave-themed visuals 
 export function Door({ value, color, idx, onClick, state, disabled, numeral, eliminated, doorCount = 3 }) {
   const isCorrect = state === "correct";
   const isWrong = state === "wrong";
   const [hov, setHov] = useState(false);
 
+  // Convert value to current numeral system and calculate responsive sizing
   const label = convertNumber(value, numeral);
   const fontSize = label.length <= 3 ? 52 : label.length <= 5 ? 40 : label.length <= 7 ? 30 : 22;
-
-  // Responsive width: shrink on small screens to fit all doors
   const doorWidth = `min(180px, calc((100vw - 80px) / ${doorCount}))`;
 
   return (
