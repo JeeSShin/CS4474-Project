@@ -120,8 +120,11 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     }
   };
 
+  const pickRef = useRef(pick);
+  pickRef.current = pick;
+
   // Hint: eliminate one wrong cave
-  const useHint = () => {
+  const useHint = useCallback(() => {
     if (hintUsed || frozen || !eq) return;
     setHintUsed(true);
     const wrongIdxs = eq.options
@@ -131,7 +134,38 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       const toEliminate = wrongIdxs[Math.floor(Math.random() * wrongIdxs.length)];
       setEliminated(prev => [...prev, toEliminate]);
     }
-  };
+  }, [hintUsed, frozen, eq, eliminated]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key !== "Escape") return;
+      if (intro) return;
+      e.preventDefault();
+      togglePause();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [intro, togglePause]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (intro || paused || !eq) return;
+      if (e.key === "h" || e.key === "H") {
+        if (hintUsed || frozen) return;
+        e.preventDefault();
+        useHint();
+        return;
+      }
+      if (e.key !== "1" && e.key !== "2" && e.key !== "3" && e.key !== "4") return;
+      const idx = Number(e.key) - 1;
+      if (idx < 0 || idx >= doorCount) return;
+      e.preventDefault();
+      pickRef.current(idx);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [intro, paused, eq, doorCount, hintUsed, frozen, useHint]);
 
   const useOpenSesame = () => {
     if (frozen || !eq) return;
