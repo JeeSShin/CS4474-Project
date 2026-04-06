@@ -2,28 +2,50 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { STAGES, FONT, MONO, DISPLAY } from "../appConstants";
 import { Btn } from "../components/Btn";
 
-function DoorOpenVisual({ color }) {
+function TreasureFoundVisual({ color }) {
   return (
     <div style={{
       width: 80, height: 80, position: "relative", margin: "0 auto 8px",
       display: "flex", alignItems: "center", justifyContent: "center",
     }}>
       <div style={{
-        width: 56, height: 72, border: `2px solid ${color}`, borderRadius: 4,
-        position: "relative", boxShadow: `0 0 20px ${color}40`,
+        width: 62, height: 48, position: "relative",
       }}>
         <div style={{
-          position: "absolute", top: 2, left: -2, width: "100%", height: "calc(100% - 4px)",
-          border: `2px solid ${color}80`, borderRadius: 2,
-          background: `${color}10`,
-          transform: "perspective(200px) rotateY(-35deg)",
-          transformOrigin: "left center",
+          position: "absolute", left: 6, right: 6, bottom: 4,
+          height: 24, borderRadius: "6px 6px 10px 10px",
+          border: `2px solid ${color}`,
+          background: `linear-gradient(180deg, ${color}38, ${color}18)`,
+          boxShadow: `0 0 18px ${color}30`,
         }}>
           <div style={{
-            position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)",
-            width: 4, height: 4, borderRadius: "50%", background: color,
+            position: "absolute", left: "50%", top: 2, transform: "translateX(-50%)",
+            width: 10, height: 18, borderLeft: `2px solid ${color}80`, borderRight: `2px solid ${color}80`,
           }} />
         </div>
+        <div style={{
+          position: "absolute", left: 10, right: 10, top: 4,
+          height: 18, borderRadius: "14px 14px 6px 6px",
+          border: `2px solid ${color}`,
+          background: `linear-gradient(180deg, ${color}2E, ${color}12)`,
+          transform: "perspective(120px) rotateX(-40deg)",
+          transformOrigin: "bottom center",
+        }} />
+        <div style={{
+          position: "absolute", top: 10, left: 14, width: 8, height: 8,
+          background: "var(--neon-yellow)", transform: "rotate(45deg)",
+          boxShadow: "0 0 14px rgba(255,209,102,0.9)",
+        }} />
+        <div style={{
+          position: "absolute", top: 6, left: 28, width: 10, height: 10,
+          background: "var(--neon-yellow)", transform: "rotate(45deg)",
+          boxShadow: "0 0 16px rgba(255,209,102,0.95)",
+        }} />
+        <div style={{
+          position: "absolute", top: 12, right: 12, width: 7, height: 7,
+          background: "var(--neon-yellow)", transform: "rotate(45deg)",
+          boxShadow: "0 0 12px rgba(255,209,102,0.85)",
+        }} />
       </div>
     </div>
   );
@@ -119,7 +141,7 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
     <div style={{ textAlign: "center", paddingTop: 40, animation: "fadeUp 0.6s ease-out" }}>
       {win ? (
         <div>
-          <DoorOpenVisual color="var(--neon-green)" />
+          <TreasureFoundVisual color="var(--neon-green)" />
         </div>
       ) : (
         <div>
@@ -131,10 +153,10 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         fontSize: 40, fontWeight: 700, fontFamily: DISPLAY, margin: "0 0 6px", letterSpacing: 3,
         color: win ? "var(--neon-green)" : "var(--neon-red)",
         animation: win ? "glow 2s ease-in-out infinite" : "none",
-      }}>{win ? "VAULT BREACHED" : "LOCKOUT"}</h2>
+      }}>{win ? "TREASURE FOUND" : "LOCKOUT"}</h2>
 
       <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 4 }}>
-        {win ? "Every gateway conquered." : `Reached Stage ${data.stage}`}
+        {win ? "Every Cave Conquered" : `Reached Stage ${data.stage}`}
       </p>
 
       {isNewHighScore && (

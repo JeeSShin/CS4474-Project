@@ -1,6 +1,6 @@
-export const DIFF = {
+﻿export const DIFF = {
   beginner: { label: "Beginner", emoji: "B", ops: ["+", "-"], lo: 1, hi: 20, doors: 3, desc: "Addition & Subtraction" },
-  advanced: { label: "Advanced", emoji: "A", ops: ["+", "-", "횞", "첨"], lo: 2, hi: 50, doors: 3, desc: "All four operations" },
+  advanced: { label: "Advanced", emoji: "A", ops: ["+", "-", "×", "÷"], lo: 2, hi: 50, doors: 3, desc: "All four operations" },
 };
 
 export const STAGES = [

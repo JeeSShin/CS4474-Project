@@ -1,4 +1,4 @@
-import { DIFF } from "./appConstants";
+﻿import { DIFF } from "./appConstants";
 
 export const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
@@ -11,11 +11,20 @@ export function makeEquation(diff, stageId) {
   const op = c.ops[ri(0, c.ops.length - 1)];
   let a, b, ans;
   switch (op) {
-    case "+": a = ri(lo, hi); b = ri(lo, hi); ans = a + b; break;
-    case "-": a = ri(lo, hi); b = ri(lo, Math.min(a, hi)); ans = a - b; break;
-    case "×": a = ri(2, Math.min(hi, 14)); b = ri(2, Math.min(hi, 14)); ans = a * b; break;
-    case "÷": b = ri(2, 12); ans = ri(2, 12); a = b * ans; break;
-    default:  a = ri(lo, hi); b = ri(lo, hi); ans = a + b;
+    case "+":
+      a = ri(lo, hi); b = ri(lo, hi); ans = a + b;
+      break;
+    case "-":
+      a = ri(lo, hi); b = ri(lo, Math.min(a, hi)); ans = a - b;
+      break;
+    case "×":
+      a = ri(2, Math.min(hi, 14)); b = ri(2, Math.min(hi, 14)); ans = a * b;
+      break;
+    case "÷":
+      b = ri(2, 12); ans = ri(2, 12); a = b * ans;
+      break;
+    default:
+      a = ri(lo, hi); b = ri(lo, hi); ans = a + b;
   }
   return buildQuestion(`${a} ${op} ${b}`, ans, c.doors, op, a, b);
 }
@@ -43,7 +52,6 @@ function buildQuestion(display, answer, doorCount, op, a, b) {
   const reasonMap = {};
   let guard = 0;
 
-  // Generate at least one pedagogical distractor based on common errors
   const pedagogical = generatePedagogicalDistractors(answer, op, a, b);
   for (const pd of pedagogical) {
     if (pd.value !== answer && opts.size < doorCount) {
@@ -52,7 +60,6 @@ function buildQuestion(display, answer, doorCount, op, a, b) {
     }
   }
 
-  // Fill remaining with random offsets
   while (opts.size < doorCount && guard++ < 100) {
     const spread = Math.max(5, Math.floor(Math.abs(answer) * 0.35));
     const fake = answer + (Math.random() > 0.5 ? ri(1, spread) : -ri(1, spread));
@@ -70,12 +77,12 @@ function generatePedagogicalDistractors(answer, op, a, b) {
     case "+":
       distractors.push({ value: answer + 1, reason: "Off by one" });
       distractors.push({ value: answer - 1, reason: "Off by one" });
-      if (a > b) distractors.push({ value: a - b, reason: `That's ${a} − ${b}, not ${a} + ${b}` });
+      if (a > b) distractors.push({ value: a - b, reason: `That's ${a} - ${b}, not ${a} + ${b}` });
       break;
     case "-":
       distractors.push({ value: answer + 1, reason: "Off by one" });
       distractors.push({ value: answer - 1, reason: "Off by one" });
-      distractors.push({ value: a + b, reason: `That's ${a} + ${b}, not ${a} − ${b}` });
+      distractors.push({ value: a + b, reason: `That's ${a} + ${b}, not ${a} - ${b}` });
       break;
     case "×":
       distractors.push({ value: a + b, reason: `That's ${a} + ${b}, not ${a} × ${b}` });
@@ -90,4 +97,3 @@ function generatePedagogicalDistractors(answer, op, a, b) {
   }
   return distractors.filter(d => d.value >= 0);
 }
-
