@@ -114,7 +114,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
                   : "idle"
                 }
                 disabled={gotCorrect}
-                numeral={numeral} doorCount={3}
+                numeral={numeral} doorCount={3} noAnimation={true}
                 onClick={handleTryDoor}
               />
             ))}
