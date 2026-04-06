@@ -57,7 +57,7 @@ export default function App() {
   }, [diff, sound, numeral, reduceMotion]);
 
   useEffect(() => {
-    document.title = "Open Sesame: Math Rocks";
+    document.title = "Open Sesame: Math Caves";
     if (mainRef.current) {
       mainRef.current.focus();
     }
@@ -115,7 +115,7 @@ export default function App() {
             highScores={highScores} returning={returning} />
         )}
         {screen === "settings" && (
-          <SettingsScreen diff={diff} setDiff={setDiff} sound={sound} setSound={setSound}
+          <SettingsScreen diff={diff} setDiff={setDiff}
             numeral={numeral} setNumeral={setNumeral}
             onBack={() => navigate("menu")} />
         )}

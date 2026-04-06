@@ -120,7 +120,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     }
   };
 
-  // Hint: eliminate one wrong rock
+  // Hint: eliminate one wrong cave
   const useHint = () => {
     if (hintUsed || frozen || !eq) return;
     setHintUsed(true);
@@ -332,7 +332,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
                 background: "rgba(123,97,255,0.1)", border: "1px solid rgba(123,97,255,0.3)",
                 fontWeight: 700, transition: "all 0.2s",
               }}
-                aria-label="Use hint: eliminates one wrong rock"
+                aria-label="Use hint: eliminates one wrong cave"
                 onMouseEnter={e => e.currentTarget.style.background = "rgba(123,97,255,0.2)"}
                 onMouseLeave={e => e.currentTarget.style.background = "rgba(123,97,255,0.1)"}
               >

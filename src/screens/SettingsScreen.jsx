@@ -1,7 +1,6 @@
 import { DIFF, FONT, MONO, DISPLAY } from "../appConstants";
 import { NUMERAL_SYSTEMS } from "../numberStyles";
 import { Btn } from "../components/Btn";
-import { sfxToggle } from "../sound";
 
 function SettingPanel({ title, accentColor = "var(--neon-green)", children }) {
   return (
@@ -48,39 +47,9 @@ function OptionCard({ selected, onClick, color = "var(--neon-green)", children }
   );
 }
 
-function ToggleSwitch({ checked, onToggle, label }) {
-  return (
-    <button onClick={onToggle} role="switch" aria-checked={checked} aria-label={label} style={{
-      display: "flex", alignItems: "center", gap: 12,
-      background: "none", border: "none", padding: 0,
-    }}>
-      <div style={{
-        width: 48, height: 24, borderRadius: 12, position: "relative",
-        background: checked ? "var(--neon-green)" : "var(--surface2)",
-        border: `1px solid ${checked ? "var(--neon-green)" : "var(--border)"}`,
-        transition: "all 0.2s",
-      }}>
-        <div style={{
-          width: 18, height: 18, borderRadius: "50%",
-          background: "#fff", position: "absolute", top: 2,
-          left: checked ? 26 : 2,
-          transition: "left 0.2s",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
-        }} />
-      </div>
-      <span style={{
-        fontFamily: MONO, fontSize: 13, fontWeight: 700,
-        color: checked ? "var(--neon-green)" : "var(--text-dim)",
-      }}>{checked ? "ON" : "OFF"}</span>
-    </button>
-  );
-}
-
 export function SettingsScreen({
   diff,
   setDiff,
-  sound,
-  setSound,
   numeral,
   setNumeral,
   onBack,
@@ -109,10 +78,6 @@ export function SettingsScreen({
             </OptionCard>
           ))}
         </div>
-      </SettingPanel>
-
-      <SettingPanel title="SOUND" accentColor="var(--neon-yellow)">
-        <ToggleSwitch checked={sound} onToggle={() => { sfxToggle(true, !sound); setSound(!sound); }} label="Sound effects" />
       </SettingPanel>
 
       <SettingPanel title="NUMBER STYLE" accentColor="var(--neon-red)">

@@ -85,8 +85,8 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       ),
     },
     {
-      title: "THE ROCKS",
-      desc: "Below are colored rocks, each with a number. Tap the rock that equals the answer!",
+      title: "THE DOORS",
+      desc: "Above are numbered door choices. Tap the one that matches the answer!",
       render: () => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           {TRY_VALS.map((v, i) => (
@@ -101,7 +101,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     },
     {
       title: "TRY IT!",
-      desc: `${convertDisplay("8 + 14", numeral)} = ? Pick the right rock below. You can try again!`,
+      desc: `${convertDisplay("8 + 14", numeral)} = ? Pick the right door above. You can try again!`,
       render: () => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", gap: 12 }}>
@@ -126,7 +126,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
           )}
           {tryPicked !== null && !gotCorrect && (
             <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--neon-red)", letterSpacing: 1 }}>
-              Try again - pick another rock
+              Try again - pick another door
             </div>
           )}
         </div>
@@ -134,20 +134,20 @@ export function TutorialScreen({ numeral, sound, onBack }) {
     },
     {
       title: "KEEP MOVING",
-      desc: "Each round is about solving the equation and choosing the matching rock.",
+      desc: "Each round is about solving the equation and choosing the matching door.",
       render: () => (
         <div style={{
           width: 260, fontSize: 13, fontFamily: MONO, color: "var(--neon-green)", letterSpacing: 2,
           padding: "12px 18px", borderRadius: 4, background: "var(--bg-deep)",
           border: "1px solid var(--neon-green)22", textAlign: "center",
         }}>
-          SOLVE THE EQUATION, THEN PICK A ROCK
+          SOLVE THE EQUATION, THEN PICK A DOOR
         </div>
       ),
     },
     {
       title: "OPEN SESAME",
-      desc: "Need help? OPEN SESAME automatically picks the correct rock and moves you to the next round.",
+      desc: "Need help? OPEN SESAME automatically picks the correct door and moves you to the next round.",
       render: () => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
           <button
