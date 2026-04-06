@@ -1,7 +1,7 @@
-import { FONT, MONO, DISPLAY } from "../appConstants";
-import { Btn } from "../components/Btn";
+import { DISPLAY } from "../appConstants";
+import { Btn } from "../components/button";
 
-export function MenuScreen({ onPlay, onTutorial, onSettings, highScores = [], returning = false }) {
+export function MenuScreen({ onPlay, onTutorial, onSettings, returning = false }) {
   const d = returning ? 0.03 : 0.15; // delay increment
   const dur = returning ? 0.35 : 0.5; // animation duration
 

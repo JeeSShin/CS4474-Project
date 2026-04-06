@@ -1,6 +1,6 @@
 import { DIFF, FONT, MONO, DISPLAY } from "../appConstants";
 import { NUMERAL_SYSTEMS } from "../numberStyles";
-import { Btn } from "../components/Btn";
+import { Btn } from "../components/button";
 
 function SettingPanel({ title, accentColor = "var(--neon-green)", children }) {
   return (

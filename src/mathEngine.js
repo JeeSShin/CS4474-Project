@@ -1,6 +1,6 @@
 ﻿import { DIFF } from "./appConstants";
 
-export const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
 export function makeEquation(diff, stageId) {
   const c = DIFF[diff];
@@ -27,24 +27,6 @@ export function makeEquation(diff, stageId) {
       a = ri(lo, hi); b = ri(lo, hi); ans = a + b;
   }
   return buildQuestion(`${a} ${op} ${b}`, ans, c.doors, op, a, b);
-}
-
-function makePemdas(c, lo, hi) {
-  const a = ri(2, Math.min(12, hi));
-  const b = ri(2, Math.min(12, hi));
-  const cc = ri(1, Math.min(20, hi));
-  const d = ri(2, Math.min(10, hi));
-  const patterns = [
-    { display: `${a} + ${b} × ${cc}`, ans: a + b * cc },
-    { display: `${a} × ${b} - ${cc}`, ans: a * b - cc },
-    { display: `${cc} + ${a} × ${b}`, ans: cc + a * b },
-    { display: `${a} × (${b} + ${cc})`, ans: a * (b + cc) },
-    { display: `${a} × ${b} + ${cc} × ${d}`, ans: a * b + cc * d },
-    { display: `${a} - ${b} × ${cc}`, ans: a - b * cc },
-    { display: `${a} + ${b * cc} ÷ ${cc}`, ans: a + b },
-  ];
-  const p = patterns[ri(0, patterns.length - 1)];
-  return buildQuestion(p.display, p.ans, c.doors);
 }
 
 function buildQuestion(display, answer, doorCount, op, a, b) {

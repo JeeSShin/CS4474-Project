@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useMemo } from "react";
-import { STAGES, FONT, MONO, DISPLAY } from "../appConstants";
-import { Btn } from "../components/Btn";
+﻿import { useState, useEffect, useRef, useMemo } from "react";
+import { STAGES, MONO, DISPLAY } from "../appConstants";
+import { Btn } from "../components/button";
 
 function TreasureFoundVisual({ color }) {
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { STAGES, FONT, MONO, DISPLAY } from "../appConstants";
-import { Btn } from "../components/Btn";
+import { Btn } from "../components/button";
 
 function StageCard({ stage: s, onSelect, bestScore }) {
   const [hov, setHov] = useState(false);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, createContext } from "react";
+﻿import { useState, useEffect, useRef, useCallback, createContext } from "react";
 import { DIFF, STAGES, FONT } from "./appConstants";
 import { globalCSS } from "./styles";
 import { sfxNav } from "./sound";
@@ -19,15 +19,6 @@ function loadStorage(key, fallback) {
 function saveStorage(key, data) {
   try { localStorage.setItem(key, JSON.stringify(data)); } catch {}
 }
-
-const SCREEN_TITLES = {
-  menu: "Open Sesame",
-  settings: "Settings — Open Sesame",
-  stages: "Stage Select — Open Sesame",
-  tutorial: "Tutorial — Open Sesame",
-  game: "Playing — Open Sesame",
-  results: "Results — Open Sesame",
-};
 
 export default function App() {
   const [screen, setScreen] = useState("menu");
@@ -113,7 +104,6 @@ export default function App() {
     }}>
       <style>{globalCSS}</style>
 
-      {/* Skip navigation link */}
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
       <RealisticCaveBG accentColor={accentColor} running={screen === "game"} />
@@ -123,7 +113,7 @@ export default function App() {
         {screen === "menu" && (
           <MenuScreen onPlay={() => startGame(1)} onTutorial={() => navigate("tutorial")}
             onSettings={() => navigate("settings")}
-            highScores={highScores} returning={returning} />
+            returning={returning} />
         )}
         {screen === "settings" && (
           <SettingsScreen diff={diff} setDiff={setDiff}

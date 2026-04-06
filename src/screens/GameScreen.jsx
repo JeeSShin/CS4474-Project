@@ -4,7 +4,7 @@ import { makeEquation } from "../mathEngine";
 import { convertDisplay, convertNumber } from "../numberStyles";
 import { sfxDoorUnlock, sfxFootstep, sfxWrong } from "../sound";
 import { GatewayCave } from "../components/GatewayCave";
-import { Btn } from "../components/Btn";
+import { Btn } from "../components/button";
 
 export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit }) {
   const [stage, setStage] = useState(startStage);
