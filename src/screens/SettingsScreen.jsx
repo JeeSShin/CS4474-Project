@@ -61,38 +61,46 @@ export function SettingsScreen({
         <Btn onClick={onBack} color="#6B7A94">{"\u2190"} Back</Btn>
       </div>
 
-      <h2 style={{
-        fontSize: 36, fontWeight: 700, color: "var(--text)", marginBottom: 24,
-        fontFamily: DISPLAY, letterSpacing: 2,
-      }}>SETTINGS</h2>
+      <div style={{
+        borderRadius: 12,
+        padding: "20px 20px 8px",
+        background: "rgba(6, 10, 16, 0.72)",
+        border: "1px solid var(--border)",
+        boxShadow: "0 8px 32px rgba(77, 45, 45, 0.5)",
+      }}>
+        <h2 style={{
+          fontSize: 36, fontWeight: 700, color: "var(--text)", marginBottom: 24,
+          fontFamily: DISPLAY, letterSpacing: 2,
+        }}>SETTINGS</h2>
 
-      <SettingPanel title="DIFFICULTY" accentColor="var(--neon-purple)">
-        <div role="radiogroup" aria-label="Difficulty level" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {Object.entries(DIFF).map(([k, v]) => (
-            <OptionCard key={k} selected={diff === k} onClick={() => setDiff(k)} color="var(--neon-green)">
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span>{v.emoji}</span>
-                <span>{v.label}</span>
-              </div>
+        <SettingPanel title="DIFFICULTY" accentColor="var(--neon-purple)">
+          <div role="radiogroup" aria-label="Difficulty level" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {Object.entries(DIFF).map(([k, v]) => (
+              <OptionCard key={k} selected={diff === k} onClick={() => setDiff(k)} color="var(--neon-green)">
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span>{v.emoji}</span>
+                  <span>{v.label}</span>
+                </div>
+                <div style={{ fontSize: 11, color: "var(--text-dim)", fontWeight: 400, marginTop: 4 }}>{v.desc}</div>
+              </OptionCard>
+            ))}
+          </div>
+        </SettingPanel>
+
+        <SettingPanel title="NUMBER STYLE" accentColor="var(--neon-red)">
+          <div role="radiogroup" aria-label="Number style" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {Object.entries(NUMERAL_SYSTEMS).map(([k, v]) => (
+              <OptionCard key={k} selected={numeral === k} onClick={() => setNumeral(k)} color="var(--neon-green)">
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span>{v.emoji}</span>
+                  <span>{v.label}</span>
+                </div>
               <div style={{ fontSize: 11, color: "var(--text-dim)", fontWeight: 400, marginTop: 4 }}>{v.desc}</div>
             </OptionCard>
           ))}
         </div>
       </SettingPanel>
-
-      <SettingPanel title="NUMBER STYLE" accentColor="var(--neon-red)">
-        <div role="radiogroup" aria-label="Number style" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {Object.entries(NUMERAL_SYSTEMS).map(([k, v]) => (
-            <OptionCard key={k} selected={numeral === k} onClick={() => setNumeral(k)} color="var(--neon-green)">
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span>{v.emoji}</span>
-                <span>{v.label}</span>
-              </div>
-              <div style={{ fontSize: 11, color: "var(--text-dim)", fontWeight: 400, marginTop: 4 }}>{v.desc}</div>
-            </OptionCard>
-          ))}
-        </div>
-      </SettingPanel>
+      </div>
     </div>
   );
 }

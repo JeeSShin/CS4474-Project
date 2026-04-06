@@ -14,11 +14,8 @@ export function Btn({ children, onClick, color = "#FFD700", style: extra = {}, b
         padding: big ? "16px 52px" : "12px 28px",
         border: `2px solid #6B5A4C`,
         borderRadius: "8px",
-        background: pressed 
-          ? `linear-gradient(135deg, #3a3228 0%, #2a1f18 100%)`
-          : hov
-            ? `linear-gradient(135deg, #5a4a3f 0%, #4a3a2f 100%)`
-            : `linear-gradient(135deg, #4a3f38 0%, #3a3228 100%)`,
+        background: pressed ? `linear-gradient(135deg, #3a3228 0%, #2a1f18 100%)`
+          : hov ? `linear-gradient(135deg, #5a4a3f 0%, #4a3a2f 100%)`: `linear-gradient(135deg, #4a3f38 0%, #3a3228 100%)`,
         color: "#E8D4C0", 
         fontWeight: 700, 
         fontSize: big ? 18 : 14,
