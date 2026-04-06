@@ -85,14 +85,14 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       ),
     },
     {
-      title: "THE ROCKS",
-      desc: "Below are colored rocks, each with a number. Tap the rock that equals the answer!",
+      title: "THE DOORS",
+      desc: "Above doors, each with a number. Tap the door that equals the answer!",
       render: () => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
           {TRY_VALS.map((v, i) => (
             <GatewayCave
               key={i} value={v} color={NEON[i]} idx={i}
-              state="idle" disabled={true} numeral={numeral} doorCount={3} noAnimation={true}
+              state="idle" disabled={false} numeral={numeral} doorCount={3}
               onClick={() => {}}
             />
           ))}
@@ -114,7 +114,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
                   : "idle"
                 }
                 disabled={gotCorrect}
-                numeral={numeral} doorCount={3} noAnimation={true}
+                numeral={numeral} doorCount={3}
                 onClick={handleTryDoor}
               />
             ))}
@@ -146,43 +146,30 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       ),
     },
     {
-      title: "STREAKS",
-      desc: "Wrong answers break your streak, but you can keep going. Streaks of 3 or more give bonus points.",
-      render: () => (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-          <div style={{
-            fontSize: 12, fontFamily: MONO, letterSpacing: 3,
-            color: "var(--neon-yellow)", padding: "6px 16px", borderRadius: 20,
-            background: "rgba(255,209,102,0.1)", border: "1px solid rgba(255,209,102,0.25)",
-          }}>
-            {"\uD83D\uDD25"} 5{"\u00D7"} STREAK
-          </div>
-          <div style={{ fontSize: 11, fontFamily: MONO, color: "var(--text-dim)" }}>
-            3+ correct in a row adds bonus points
-          </div>
-        </div>
-      ),
-    },
-    {
-      title: "SCORING",
-      desc: "Each correct answer earns 100 base points. Streaks of 3 or more add n x 12 bonus points.",
+      title: "OPEN SESAME",
+      desc: "Open Sesame picks the correct door for you automatically and moves you to the next round.",
       render: () => (
         <div style={{
-          display: "flex", flexDirection: "column", gap: 10, alignItems: "center",
-          fontFamily: MONO, fontSize: 12,
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
         }}>
-          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
-            <div style={{ textAlign: "center", padding: "8px 12px", background: "var(--surface)", borderRadius: 4 }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--neon-green)" }}>+100</div>
-              <div style={{ color: "var(--text-dim)", fontSize: 10 }}>BASE</div>
-            </div>
-            <div style={{ textAlign: "center", padding: "8px 12px", background: "var(--surface)", borderRadius: 4 }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: "var(--neon-yellow)" }}>+36</div>
-              <div style={{ color: "var(--text-dim)", fontSize: 10 }}>STREAK</div>
-            </div>
-          </div>
-          <div style={{ color: "var(--text-dim)", fontSize: 11 }}>
-            = <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>136</span> total points
+          <button
+            type="button"
+            style={{
+              fontSize: 13,
+              fontFamily: MONO,
+              letterSpacing: 2,
+              color: "#E8D4C0",
+              padding: "8px 20px",
+              borderRadius: 22,
+              background: "rgba(232,212,192,0.12)",
+              border: "1px solid rgba(232,212,192,0.28)",
+              fontWeight: 700,
+            }}
+          >
+            OPEN SESAME
+          </button>
+          <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--text-dim)", textAlign: "center", maxWidth: 280 }}>
+            Uses the correct answer instantly so you can keep going.
           </div>
         </div>
       ),

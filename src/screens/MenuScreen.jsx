@@ -2,7 +2,6 @@ import { FONT, MONO, DISPLAY } from "../appConstants";
 import { Btn } from "../components/Btn";
 
 export function MenuScreen({ onPlay, onTutorial, onSettings, highScores = [], returning = false }) {
-  const best = highScores.length > 0 ? highScores[0] : null;
   const d = returning ? 0.03 : 0.15; // delay increment
   const dur = returning ? 0.35 : 0.5; // animation duration
 
@@ -28,26 +27,6 @@ export function MenuScreen({ onPlay, onTutorial, onSettings, highScores = [], re
           }}>OPEN SESAME: MATH DOORS</h1>
         </div>
       </div>
-
-      {/* Personal best display */}
-      {best && (
-        <div style={{
-          textAlign: "center", marginBottom: 24,
-          animation: `fadeUp ${returning ? "0.35s" : "0.6s"} ease-out ${d * 1.2}s both`,
-        }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "6px 16px", borderRadius: 20,
-            background: "rgba(255,209,102,0.08)", border: "1px solid rgba(255,209,102,0.2)",
-            fontFamily: MONO, fontSize: 12,
-          }}>
-            <span style={{ color: "var(--text-dim)" }}>Best:</span>
-            <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>
-              {best.score.toLocaleString()}
-            </span>
-          </div>
-        </div>
-      )}
 
       {/* Button grid */}
       <div style={{

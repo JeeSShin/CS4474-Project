@@ -2,28 +2,39 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { STAGES, FONT, MONO, DISPLAY } from "../appConstants";
 import { Btn } from "../components/Btn";
 
-function DoorOpenVisual({ color }) {
+function TreasureFoundVisual({ color }) {
   return (
     <div style={{
       width: 80, height: 80, position: "relative", margin: "0 auto 8px",
       display: "flex", alignItems: "center", justifyContent: "center",
     }}>
       <div style={{
-        width: 56, height: 72, border: `2px solid ${color}`, borderRadius: 4,
-        position: "relative", boxShadow: `0 0 20px ${color}40`,
+        width: 58, height: 38, position: "relative",
       }}>
         <div style={{
-          position: "absolute", top: 2, left: -2, width: "100%", height: "calc(100% - 4px)",
-          border: `2px solid ${color}80`, borderRadius: 2,
-          background: `${color}10`,
-          transform: "perspective(200px) rotateY(-35deg)",
-          transformOrigin: "left center",
+          position: "absolute", left: 4, right: 4, bottom: 4, height: 28,
+          border: `2px solid ${color}`, borderRadius: "0 0 10px 10px",
+          background: `linear-gradient(180deg, ${color}CC 0%, ${color}88 100%)`,
+          boxShadow: `0 0 20px ${color}40`,
         }}>
           <div style={{
-            position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)",
-            width: 4, height: 4, borderRadius: "50%", background: color,
+            position: "absolute", left: "50%", top: 6, transform: "translateX(-50%)",
+            width: 12, height: 10, borderRadius: 3,
+            border: "2px solid rgba(35, 22, 6, 0.7)", background: "rgba(255, 245, 200, 0.9)",
           }} />
         </div>
+        <div style={{
+          position: "absolute", left: 6, right: 6, top: 6, height: 18,
+          border: `2px solid ${color}`, borderRadius: "12px 12px 4px 4px",
+          background: `linear-gradient(180deg, #fff2a8 0%, ${color}CC 100%)`,
+          transform: "perspective(120px) rotateX(-45deg)",
+          transformOrigin: "bottom center",
+          boxShadow: `0 0 18px ${color}55`,
+        }} />
+        <div style={{
+          position: "absolute", top: -2, left: "50%", transform: "translateX(-50%)",
+          fontSize: 22, filter: "drop-shadow(0 0 10px rgba(255, 209, 102, 0.9))",
+        }}>{"\uD83D\uDCB0"}</div>
       </div>
     </div>
   );
@@ -45,14 +56,14 @@ function LockedGateVisual({ color }) {
   );
 }
 
-function StatBox({ label, value, color = "var(--neon-green)" }) {
+function StatBox({ label, value }) {
   return (
     <div style={{
       flex: 1, minWidth: 80, padding: "10px 8px", textAlign: "center",
       background: "var(--surface)", borderRadius: 4, border: "1px solid var(--border)",
     }}>
-      <div style={{ fontSize: 22, fontWeight: 700, fontFamily: DISPLAY, color }}>{value}</div>
-      <div style={{ fontSize: 10, fontFamily: MONO, color: "var(--text-dim)", letterSpacing: 1, marginTop: 2 }}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, fontFamily: DISPLAY, color: "#000" }}>{value}</div>
+      <div style={{ fontSize: 10, fontFamily: MONO, color: "#000", letterSpacing: 1, marginTop: 2 }}>{label}</div>
     </div>
   );
 }
@@ -97,35 +108,30 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
     return () => cancelAnimationFrame(raf.current);
   }, [data.score]);
 
-  const { correct, wrong, timeouts, accuracy, avgTime, bestStreakVal, stageBreakdown } = useMemo(() => {
+  const { correct, wrong, accuracy, stageBreakdown } = useMemo(() => {
     const log = data.roundLog ?? [];
     const c = data.totalCorrect ?? log.filter(r => r.result === "correct").length;
     const w = data.totalWrong ?? log.filter(r => r.result === "wrong").length;
     const t = data.totalTimeout ?? log.filter(r => r.result === "timeout").length;
     const total = c + w + t;
     const acc = total > 0 ? Math.round((c / total) * 100) : 0;
-    const avg = log.length > 0
-      ? (log.filter(r => r.result === "correct").reduce((s, r) => s + r.timeTaken, 0) / Math.max(1, c)).toFixed(1)
-      : "—";
     const breakdown = {};
     for (const r of log) {
       if (!breakdown[r.stage]) breakdown[r.stage] = { correct: 0, total: 0 };
       breakdown[r.stage].total++;
       if (r.result === "correct") breakdown[r.stage].correct++;
     }
-    return { correct: c, wrong: w, timeouts: t, accuracy: acc, avgTime: avg, bestStreakVal: data.bestStreak ?? 0, stageBreakdown: breakdown };
+    return { correct: c, wrong: w, accuracy: acc, stageBreakdown: breakdown };
   }, [data]);
 
-  // Only true when this run's score strictly exceeds all previous scores
   const prevBest = highScores.length > 1 ? highScores[1]?.score : 0;
   const isNewHighScore = highScores.length > 0 && highScores[0]?.score === data.score && data.score > (prevBest ?? 0);
 
   return (
     <div style={{ textAlign: "center", paddingTop: 40, animation: "fadeUp 0.6s ease-out" }}>
-
       {win ? (
         <div>
-          <DoorOpenVisual color="var(--neon-green)" />
+          <TreasureFoundVisual color="var(--neon-yellow)" />
         </div>
       ) : (
         <div>
@@ -137,13 +143,12 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         fontSize: 40, fontWeight: 700, fontFamily: DISPLAY, margin: "0 0 6px", letterSpacing: 3,
         color: win ? "var(--neon-green)" : "var(--neon-red)",
         animation: win ? "glow 2s ease-in-out infinite" : "none",
-      }}>{win ? "VAULT BREACHED" : "LOCKOUT"}</h2>
+      }}>{win ? "TREASURE FOUND" : "LOCKOUT"}</h2>
 
       <p style={{ color: "var(--text-dim)", fontSize: 14, marginBottom: 4 }}>
-        {win ? "Every gateway conquered." : `Reached Stage ${data.stage}`}
+        {win ? "You found the hidden reward." : `Reached Stage ${data.stage}`}
       </p>
 
-      {/* New high score celebration */}
       {isNewHighScore && (
         <div style={{
           fontSize: 14, fontFamily: MONO, fontWeight: 700, letterSpacing: 3,
@@ -152,7 +157,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         }}>{"\u2B50"} NEW HIGH SCORE! {"\u2B50"}</div>
       )}
 
-      {/* Score display */}
       <div style={{ position: "relative" }}>
         {data.score > 0 && (
           <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--text-dim)", marginBottom: 4 }}>
@@ -166,19 +170,15 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         }}>{displayScore.toLocaleString()}</div>
       </div>
 
-      {/* Performance breakdown */}
       <div style={{
         display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap",
         marginBottom: 16, animation: "fadeUp 0.5s ease-out 0.4s both",
       }}>
-        <StatBox label="ACCURACY" value={`${accuracy}%`} color={accuracy >= 80 ? "var(--neon-green)" : accuracy >= 50 ? "var(--neon-yellow)" : "var(--neon-red)"} />
-        <StatBox label="CORRECT" value={correct} color="var(--neon-green)" />
-        <StatBox label="WRONG" value={wrong} color="var(--neon-red)" />
-        <StatBox label="AVG TIME" value={`${avgTime}s`} color="var(--neon-purple)" />
-        <StatBox label="BEST STREAK" value={bestStreakVal} color="var(--neon-yellow)" />
+        <StatBox label="ACCURACY" value={`${accuracy}%`} />
+        <StatBox label="CORRECT" value={correct} />
+        <StatBox label="WRONG" value={wrong} />
       </div>
 
-      {/* Per-stage breakdown bars */}
       {Object.keys(stageBreakdown).length > 0 && (
         <div style={{
           maxWidth: 340, margin: "0 auto 20px", display: "flex", flexDirection: "column", gap: 6,
@@ -190,19 +190,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         </div>
       )}
 
-      {/* Personal best from high scores */}
-      {highScores.length > 0 && (
-        <div style={{
-          fontSize: 11, fontFamily: MONO, color: "var(--text-dim)", marginBottom: 16,
-          animation: "fadeUp 0.5s ease-out 0.55s both",
-        }}>
-          Personal Best: <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>
-            {highScores[0].score.toLocaleString()}
-          </span>
-        </div>
-      )}
-
-      {/* Action buttons */}
       <div style={{
         display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
         animation: "fadeUp 0.5s ease-out 0.6s both",

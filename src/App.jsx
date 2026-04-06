@@ -126,7 +126,7 @@ export default function App() {
             highScores={highScores} returning={returning} />
         )}
         {screen === "settings" && (
-          <SettingsScreen diff={diff} setDiff={setDiff} sound={sound} setSound={setSound}
+          <SettingsScreen diff={diff} setDiff={setDiff}
             numeral={numeral} setNumeral={setNumeral}
             onBack={() => navigate("menu")} />
         )}
