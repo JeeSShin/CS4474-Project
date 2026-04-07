@@ -34,9 +34,9 @@ export function MenuScreen({ onPlay, onTutorial, onSettings, returning = false }
       <div style={{
         display: "flex", flexDirection: "column", gap: 10, alignItems: "center",
       }}>
-        {/* Hero play button */}
+        {/*play button */}
         <div style={{ animation: `fadeUp ${dur}s ease-out ${d * 2}s both`, width: "100%", maxWidth: 360, textAlign: "center" }}>
-          <Btn onClick={onPlay} color="#00F5D4" big style={{ width: "100%" }}>
+          <Btn onClick={onPlay} big style={{ width: "100%" }}>
             <span aria-hidden="true">{"\u25B6"}</span> &nbsp;Play
           </Btn>
         </div>
@@ -47,7 +47,7 @@ export function MenuScreen({ onPlay, onTutorial, onSettings, returning = false }
           animation: `fadeUp ${dur}s ease-out ${d * 3}s both`,
           width: "100%", maxWidth: 360,
         }}>
-          <Btn onClick={onTutorial} color="#FFD166" style={{
+          <Btn onClick={onTutorial} style={{
             width: "100%",
             ...(!returning ? { animation: "tutorialPulse 1.5s ease-in-out infinite", borderColor: "#FFD166" } : {}),
           }}>Tutorial</Btn>
@@ -55,7 +55,7 @@ export function MenuScreen({ onPlay, onTutorial, onSettings, returning = false }
 
         {/* Settings */}
         <div style={{ animation: `fadeUp ${dur}s ease-out ${d * 4}s both` }}>
-          <Btn onClick={onSettings} color="#6B7A94">Settings</Btn>
+          <Btn onClick={onSettings}>Settings</Btn>
         </div>
       </div>
     </div>

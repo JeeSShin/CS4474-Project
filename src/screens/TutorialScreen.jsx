@@ -5,11 +5,12 @@ import { Btn } from "../components/button";
 import { Cave } from "../components/Cave";
 import { sfxCorrect, sfxWrong } from "../sound";
 
-// Interactive tutorial demo values
-const TRY_VALS = [20, 22, 24];
-const CORRECT_VAL = 22;
+//tutorial demo values
+const Testing = [20, 22, 24];
+const Correct = 22;
 
 // Visual step indicator with connected dots
+//This is for the tutorial screen, showing which step you're on  
 function ProgressDots({ current, total }) {
   return (
     <div
@@ -65,7 +66,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
   // Handles door selection in the interactive "Try It" step
   function handleTryDoor(i) {
     if (gotCorrect) return;
-    if (TRY_VALS[i] === CORRECT_VAL) {
+    if (Testing[i] === Correct) {
       setTryPicked(i);
       setGotCorrect(true);
       if (sound) sfxCorrect();
@@ -95,7 +96,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       desc: "Above are numbered door choices. Tap the one that matches the answer!",
       render: () => (
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-          {TRY_VALS.map((v, i) => (
+          {Testing.map((v, i) => (
             <Cave
               key={i} value={v} color={NEON[i]} idx={i}
               state="idle" disabled={true} numeral={numeral} doorCount={3} noAnimation={true}
@@ -111,11 +112,11 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       render: () => (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", gap: 12 }}>
-            {TRY_VALS.map((v, i) => (
+            {Testing.map((v, i) => (
               <Cave
                 key={i} value={v} color={NEON[i]} idx={i}
                 state={
-                  gotCorrect && v === CORRECT_VAL ? "correct"
+                  gotCorrect && v === Correct ? "correct"
                   : tryPicked === i && !gotCorrect ? "wrong"
                   : "idle"
                 }
@@ -187,7 +188,7 @@ export function TutorialScreen({ numeral, sound, onBack }) {
   return (
     <div style={{ animation: "fadeUp 0.5s ease-out", paddingTop: 24 }}>
       <div style={{ marginBottom: 16 }}>
-        <Btn onClick={onBack} color="#6B7A94">{"\u2190"} Back</Btn>
+        <Btn onClick={onBack}>{"\u2190"} Back</Btn>
       </div>
 
       <h2 style={{
@@ -214,10 +215,10 @@ export function TutorialScreen({ numeral, sound, onBack }) {
       </div>
 
       <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 20 }}>
-        {step > 0 && <Btn onClick={() => goTo(step - 1)} color="#6B7A94">{"\u2190"} Prev</Btn>}
+        {step > 0 && <Btn onClick={() => goTo(step - 1)}>{"\u2190"} Prev</Btn>}
         {step < steps.length - 1
-          ? <Btn onClick={() => goTo(step + 1)} color="#00F5D4">Next {"\u2192"}</Btn>
-          : <Btn onClick={onBack} color="#00F5D4">Got it!</Btn>
+          ? <Btn onClick={() => goTo(step + 1)}>Next {"\u2192"}</Btn>
+          : <Btn onClick={onBack}>Got it!</Btn>
         }
       </div>
     </div>

@@ -69,15 +69,15 @@ function LockedGateVisual({ color }) {
   );
 }
 
-// Displays a single stat with label and colored value
-function StatBox({ label, value, color = "var(--neon-green)" }) {
+// Displays a single stat with label and value
+function StatBox({ label, value }) {
   return (
     <div style={{
       flex: 1, minWidth: 80, padding: "10px 8px", textAlign: "center",
       background: "var(--surface)", borderRadius: 4, border: "1px solid var(--border)",
     }}>
-      <div style={{ fontSize: 22, fontWeight: 700, fontFamily: DISPLAY, color }}>{value}</div>
-      <div style={{ fontSize: 10, fontFamily: MONO, color: "var(--text-dim)", letterSpacing: 1, marginTop: 2 }}>{label}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, fontFamily: DISPLAY, color: "#000" }}>{value}</div>
+      <div style={{ fontSize: 10, fontFamily: MONO, color: "#000", letterSpacing: 1, marginTop: 2 }}>{label}</div>
     </div>
   );
 }
@@ -104,7 +104,7 @@ function StageBar({ stageId, correct, total }) {
 }
 
 // End-of-game results with animated score, stats, and stage breakdown
-export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highScores = [] }) {
+export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage }) {
   const win = data.result === "win";
   const [displayScore, setDisplayScore] = useState(0);
   const raf = useRef(null);
@@ -141,9 +141,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
     return { correct: c, wrong: w, accuracy: acc, bestStreakVal: data.bestStreak ?? 0, stageBreakdown: breakdown };
   }, [data]);
 
-  const prevBest = highScores.length > 1 ? highScores[1]?.score : 0;
-  const isNewHighScore = highScores.length > 0 && highScores[0]?.score === data.score && data.score > (prevBest ?? 0);
-
   return (
     <div style={{ textAlign: "center", paddingTop: 40, animation: "fadeUp 0.6s ease-out" }}>
       {win ? (
@@ -166,14 +163,6 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         {win ? "Every Cave Conquered" : `Reached Stage ${data.stage}`}
       </p>
 
-      {isNewHighScore && (
-        <div style={{
-          fontSize: 14, fontFamily: MONO, fontWeight: 700, letterSpacing: 3,
-          color: "var(--neon-yellow)", margin: "8px 0",
-          animation: "pulse 1s infinite",
-        }}>{"\u2B50"} NEW HIGH SCORE! {"\u2B50"}</div>
-      )}
-
       <div style={{ position: "relative" }}>
         {data.score > 0 && (
           <div style={{ fontSize: 12, fontFamily: MONO, color: "var(--text-dim)", marginBottom: 4 }}>
@@ -191,10 +180,10 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap",
         marginBottom: 16, animation: "fadeUp 0.5s ease-out 0.4s both",
       }}>
-        <StatBox label="ACCURACY" value={`${accuracy}%`} color={accuracy >= 80 ? "var(--neon-green)" : accuracy >= 50 ? "var(--neon-yellow)" : "var(--neon-red)"} />
-        <StatBox label="CORRECT" value={correct} color="var(--neon-green)" />
-        <StatBox label="WRONG" value={wrong} color="var(--neon-red)" />
-        <StatBox label="BEST STREAK" value={bestStreakVal} color="var(--neon-yellow)" />
+        <StatBox label="ACCURACY" value={`${accuracy}%`} />
+        <StatBox label="CORRECT" value={correct} />
+        <StatBox label="WRONG" value={wrong} />
+        <StatBox label="BEST STREAK" value={bestStreakVal} />
       </div>
 
       {Object.keys(stageBreakdown).length > 0 && (
@@ -208,28 +197,17 @@ export function ResultsScreen({ data, onMenu, onRetry, onRetryFromStage, highSco
         </div>
       )}
 
-      {highScores.length > 0 && (
-        <div style={{
-          fontSize: 11, fontFamily: MONO, color: "var(--text-dim)", marginBottom: 16,
-          animation: "fadeUp 0.5s ease-out 0.55s both",
-        }}>
-          Personal Best: <span style={{ color: "var(--neon-yellow)", fontWeight: 700 }}>
-            {highScores[0].score.toLocaleString()}
-          </span>
-        </div>
-      )}
-
       <div style={{
         display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap",
         animation: "fadeUp 0.5s ease-out 0.6s both",
       }}>
-        <Btn onClick={onRetry} color="#00F5D4">Play from Start</Btn>
+        <Btn onClick={onRetry}>Play from Start</Btn>
         {!win && data.stage > 1 && onRetryFromStage && (
-          <Btn onClick={() => onRetryFromStage(data.stage)} color="#FFD166">
+          <Btn onClick={() => onRetryFromStage(data.stage)}>
             Retry Stage {data.stage}
           </Btn>
         )}
-        <Btn onClick={onMenu} color="#7B61FF">Main Menu</Btn>
+        <Btn onClick={onMenu}>Main Menu</Btn>
       </div>
     </div>
   );

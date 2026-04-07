@@ -61,7 +61,7 @@ export function SettingsScreen({
     <div style={{ animation: "fadeUp 0.5s ease-out", paddingTop: 30 }}>
       {/* Back button */}
       <div style={{ marginBottom: 16 }}>
-        <Btn onClick={onBack} color="#6B7A94">{"\u2190"} Back</Btn>
+        <Btn onClick={onBack}>{"\u2190"} Back</Btn>
       </div>
 
       <div style={{

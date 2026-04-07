@@ -11,6 +11,8 @@ import { ResultsScreen } from "./screens/ResultsScreen";
 
 // Context to share sound setting with child components
 export const SoundContext = createContext(true);
+const SETTINGS_KEY = "open-sesame-settings";
+const VISITED_KEY = "open-sesame-visited";
 
 // LocalStorage helpers with error handling
 function loadStorage(key, fallback) {
@@ -25,27 +27,28 @@ function saveStorage(key, data) {
 export default function App() {
   const [screen, setScreen] = useState("menu");
   const [diff, setDiff] = useState(() => {
-    const savedDiff = loadStorage("eq-gateway-settings", null)?.diff;
+    const savedDiff = loadStorage(SETTINGS_KEY, null)?.diff;
     return DIFF[savedDiff] ? savedDiff : "beginner";
   });
-  const [sound, setSound] = useState(() => loadStorage("eq-gateway-settings", null)?.sound ?? true);
-  const [numeral, setNumeral] = useState(() => loadStorage("eq-gateway-settings", null)?.numeral || "arabic");
+  const [sound, setSound] = useState(() => loadStorage(SETTINGS_KEY, null)?.sound ?? true);
+  const [numeral, setNumeral] = useState(() => loadStorage(SETTINGS_KEY, null)?.numeral || "arabic");
   const [startStage, setStartStage] = useState(1);
   const [result, setResult] = useState(null);
   const [gameKey, setGameKey] = useState(0);
-  const [reduceMotion, setReduceMotion] = useState(() => loadStorage("eq-gateway-settings", null)?.reduceMotion ?? false);
-  const [highScores, setHighScores] = useState(() => loadStorage("eq-gateway-highscores", []));
+  const [reduceMotion, setReduceMotion] = useState(() => loadStorage(SETTINGS_KEY, null)?.reduceMotion ?? false);
   const mainRef = useRef(null);
   const [returning] = useState(() => {
-    try { return localStorage.getItem("eq-gateway-visited") === "1"; } catch { return false; }
+    try { return localStorage.getItem(VISITED_KEY) === "1"; } catch { return false; }
   });
 
   useEffect(() => {
-    try { localStorage.setItem("eq-gateway-visited", "1"); } catch {}
+    try {
+      localStorage.setItem(VISITED_KEY, "1");
+    } catch {}
   }, []);
 
   useEffect(() => {
-    saveStorage("eq-gateway-settings", { diff, sound, numeral, reduceMotion });
+    saveStorage(SETTINGS_KEY, { diff, sound, numeral, reduceMotion });
   }, [diff, sound, numeral, reduceMotion]);
 
   useEffect(() => {
@@ -58,18 +61,11 @@ export default function App() {
   // Starts a new game from specified stage, increments key to force remount
   const startGame = (st = 1) => { setStartStage(st); setGameKey(k => k + 1); setScreen("game"); };
 
-  // Saves score to high scores and navigates to results screen
+  // Stores the finished game result and navigates to the results screen
   const handleFinish = useCallback((r) => {
-    const entry = { score: r.score, diff, date: new Date().toISOString(), stages: r.stage, result: r.result };
-    setHighScores(prev => {
-      const updated = [...prev, entry].sort((a, b) => b.score - a.score).slice(0, 5);
-      saveStorage("eq-gateway-highscores", updated);
-      return updated;
-    });
-
     setResult(r);
     setScreen("results");
-  }, [diff]);
+  }, []);
 
   // Navigates between screens with sound effect
   const navigate = useCallback((s) => { sfxNav(sound); setScreen(s); }, [sound]);
@@ -87,7 +83,8 @@ export default function App() {
   }, [screen, navigate]);
 
   const accentColor = screen === "game" ? (STAGES[(startStage || 1) - 1]?.color || "#FFD700") : "#FFD700";
-
+// The main app component manages the overall state of the game, including current screen, settings, and game results.
+//  It also handles navigation and persists settings  
   return (
     <SoundContext.Provider value={sound}>
     <div className={reduceMotion ? "reduce-motion" : ""} style={{
@@ -122,8 +119,7 @@ export default function App() {
         {screen === "results" && result && (
           <ResultsScreen data={result} onMenu={() => setScreen("menu")}
             onRetry={() => startGame(1)}
-            onRetryFromStage={(st) => startGame(st)}
-            highScores={highScores} />
+            onRetryFromStage={(st) => startGame(st)} />
         )}
       </main>
     </div>

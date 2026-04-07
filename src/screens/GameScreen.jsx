@@ -76,7 +76,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
     totalWrong: totalWrong.current,
     stageScores: stageScores.current,
   });
-
+  // Advances to next round or stage, or finishes game if final stage completed
   useEffect(() => {
     if (intro) return;
     if (round >= stg.rounds) {
@@ -85,8 +85,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       return;
     }
     next();
-  }, [round, intro]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [round, intro]); 
   // Handles door selection - checks answer, updates score, advances round
   const pick = (idx) => {
     if (frozen || eliminated.includes(idx)) return;
@@ -140,7 +139,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
       setEliminated(prev => [...prev, toEliminate]);
     }
   }, [hintUsed, frozen, eq, eliminated]);
-
+// Keyboard controls: Escape to pause/resume, 1-3 to select doors, H for hint
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key !== "Escape") return;
@@ -162,7 +161,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
         useHint();
         return;
       }
-      if (e.key !== "1" && e.key !== "2" && e.key !== "3" && e.key !== "4") return;
+      if (e.key !== "1" && e.key !== "2" && e.key !== "3") return;
       const idx = Number(e.key) - 1;
       if (idx < 0 || idx >= doorCount) return;
       e.preventDefault();
@@ -224,7 +223,7 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
           <span style={{ color: "var(--border)" }}>|</span>
           <span>{DIFF[diff].label.toUpperCase()} MODE</span>
         </div>
-        <Btn onClick={handleEnter} color={stg.color} big>ENTER</Btn>
+        <Btn onClick={handleEnter} big>ENTER</Btn>
       </div>
     );
   }
@@ -443,9 +442,9 @@ export function GameScreen({ diff, startStage, sound, numeral, onFinish, onQuit 
             fontSize: 12, fontFamily: MONO, color: "var(--text-dim)",
             letterSpacing: 4, marginBottom: 4,
           }}>PRESS ESC TO RESUME</div>
-          <Btn onClick={handleResume} color="#00F5D4">Resume</Btn>
-          <Btn onClick={handleRestart} color="#FFD166">Restart</Btn>
-          <Btn onClick={onQuit} color="#6B7A94">Quit to Menu</Btn>
+          <Btn onClick={handleResume}>Resume</Btn>
+          <Btn onClick={handleRestart}>Restart</Btn>
+          <Btn onClick={onQuit}>Quit to Menu</Btn>
         </div>
       )}
     </div>

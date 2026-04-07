@@ -7,11 +7,10 @@ export const NUMERAL_SYSTEMS = {
 
 // Value-to-symbol mapping for Roman numeral conversion (descending order)
 const ROMAN_MAP = [
-  [10, "X"], [9, "IX"], [5, "V"], [4, "IV"],
-  [1, "I"],
+  [10, "X"], [9, "IX"], [5, "V"], [4, "IV"],[1, "I"],
 ];
 
-// Converts integer to Roman numerals. Returns "N" for zero, falls back to Arabic for >3999
+// Converts integer to Roman numerals. Returns "N" for zero
 function toRoman(n) {
   if (n === 0) return "N";
   let prefix = "";
@@ -19,8 +18,6 @@ function toRoman(n) {
     prefix = "-";
     n = -n;
   }
-  if (n > 3999) return prefix + String(n);
-
   let result = "";
   for (const [val, sym] of ROMAN_MAP) {
     while (n >= val) {
@@ -34,7 +31,8 @@ function toRoman(n) {
 // Converts integer to binary string representation
 function toBinary(n) {
   if (n === 0) return "0";
-  if (n < 0) return "-" + Math.abs(n).toString(2);
+  if (n < 0) 
+    return "-" + Math.abs(n).toString(2);
   return n.toString(2);
 }
 
@@ -51,7 +49,7 @@ export function convertNumber(n, system) {
 }
 
 // Converts all numbers in a display string to the specified numeral system
-export function convertDisplay(displayStr, system) {
-  if (!system || system === "arabic") return displayStr;
-  return displayStr.replace(/-?\d+/g, (m) => convertNumber(Number(m), system));
+export function convertDisplay(str, system) {
+  if (!system || system === "arabic") return str;
+  return str.replace(/-?\d+/g, (m) => convertNumber(Number(m), system));
 }

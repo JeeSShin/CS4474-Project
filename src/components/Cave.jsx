@@ -12,7 +12,7 @@ export function Cave({ value, color, idx, onClick, state, disabled, numeral, eli
   const label = convertNumber(value, numeral);
   const fontSize = label.length <= 3 ? 62 : label.length <= 5 ? 48 : label.length <= 7 ? 36 : 28;
   const caveWidth = `min(180px, calc((100vw - 80px) / ${doorCount}))`;
-
+// Handle click events, preventing interaction if disabled or eliminated
   return (
     <button
       onClick={() => !disabled && !eliminated && onClick(idx)}
@@ -54,7 +54,7 @@ export function Cave({ value, color, idx, onClick, state, disabled, numeral, eli
               : "0 8px 16px rgba(0,0,0,0.18), inset 8px 8px 12px rgba(255,255,255,0.07), inset -10px -8px 16px rgba(49,52,45,0.24)",
         opacity: eliminated ? 0.5 : disabled && !isCorrect && !isWrong ? 0.7 : 1,
       }}
-    >
+    >{/* Decorative layers for cave texture and lighting effects */}
       <div
         style={{
           position: "absolute",

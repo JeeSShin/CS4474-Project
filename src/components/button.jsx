@@ -3,7 +3,7 @@ import { SoundContext } from "../App";
 import { sfxClick } from "../sound";
 
 // Reusable button with cave-themed styling, click sound, and press animation
-export function Btn({ children, onClick, color = "#FFD700", style: extra = {}, big }) {
+export function Btn({ children, onClick, style: extra = {}, big }) {
   const soundOn = useContext(SoundContext);
   const [pressed, setPressed] = useState(false);
   return (
